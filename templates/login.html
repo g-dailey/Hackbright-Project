@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> Welcome Back!</h1>
+
+<div class="container">
+<form class="form-signin" >
+
+  <h2 class="form-signin-heading">Please Sign In</h2>
+
+  <div>
+
+    <label for="email" >Email Address</label>
+    <input type="email"
+           name="email"
+           class="form-control input-sm"
+           placeholder="Email Address"
+           required
+           autofocus>
+  </div>
+
+  <div >
+    <label for="password" class="sr-only">Password</label>
+    <input type="password"
+           name="password"
+           class="form-control input"
+           placeholder="Password"
+           required>
+  </div>
+
+  <button class="btn btn-primary btn-block" type="submit">Sign In
+  </button>
+  </div>
+
+</form>
+</div>
+
+
+
+
+
+{% endblock content %}

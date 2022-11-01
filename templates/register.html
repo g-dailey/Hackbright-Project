@@ -4,5 +4,70 @@
 
 <h1> Hello!</h1>
 
+<div class="container">
+<form class="form-signup" method="POST">
+
+  <h2 class="form-signup-heading">Please Sign Up</h2>
+
+  <div>
+
+    <label for="email" >Email Address</label>
+    <input type="email"
+           name="email"
+           class="form-control input-sm"
+           placeholder="Email Address"
+           required
+           autofocus>
+  </div>
+
+  <div>
+
+    <label for="fname" >First Name</label>
+    <input type="fname"
+           name="fname"
+           class="form-control input-sm"
+           placeholder="First Name"
+           required
+           autofocus>
+  </div>
+
+  <div>
+
+    <label for="lname" >Last Name</label>
+    <input type="lname"
+           name="lname"
+           class="form-control input-sm"
+           placeholder="Last Name"
+           required
+           autofocus>
+  </div>
+
+  <div>
+
+    <label for="difficulty-level" >Programming Language Difficulty Level</label>
+    <input type="difficulty-level"
+           name="difficulty-level"
+           class="form-control input-sm"
+           placeholder="Program Language Difficulty Level"
+           required
+           autofocus>
+  </div>
+
+  <div >
+    <label for="password" class="sr-only">Password</label>
+    <input type="password"
+           name="password"
+           class="form-control input"
+           placeholder="Password"
+           required>
+  </div>
+
+  <button class="btn btn-primary btn-block" type="submit">Sign Up
+  </button>
+  </div>
+
+</form>
+</div>
+
 
 {% endblock content %}
