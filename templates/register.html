@@ -5,69 +5,94 @@
 <h1> Hello! {{name}}</h1>
 
 <div class="container">
-<form class="/form-signup" method="POST">
+  <div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4"> Sign Up Today </legend>
 
-  <h2 class="form-signup-heading">Please Sign Up</h2>
+          <div class="form-group">
+            {{ form.first_name.label(class="form-control-label") }}
+            {{ form.first_name(class="form-control form-control-lg") }}
+          </div>
 
-  <div>
 
-    <label for="email" >Email Address</label>
-    <input type="email"
-           name="email"
-           class="form-control input-sm"
-           placeholder="Email Address"
-           required
-           autofocus>
+          <div class="form-group">
+            {{ form.last_name.label(class="form-control-label") }}
+            {{ form.last_name(class="form-control form-control-lg") }}
+          </div>
+
+          <div class="form-group">
+            {{ form.email.label(class="form-control-label") }}
+            {% if form.email.errors %}
+              {{ form.email(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.email.errors %}
+                  <span> {{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.email(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            {{ form.password.label(class="form-control-label") }}
+            {% if form.password.errors %}
+              {{ form.password(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.password.errors %}
+                  <span> {{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.password(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            {{ form.prompt_difficulty_level.label(class="form-control-label") }}
+            {{ form.prompt_difficulty_level(class="form-control form-control-lg") }}
+          </div>
+
+          <div class="form-group">
+            {{ form.primary_language.label(class="form-control-label") }}
+            {{ form.primary_language(class="form-control form-control-lg") }}
+          </div>
+
+          <div class="form-group">
+            {{ form.programming_language.label(class="form-control-label") }}
+          </div>
+          {{ form.programming_language(class="form-control form-control-lg") }}
+
+          <div class="form-group">
+            {{ form.timezone.label(class="form-control-label") }}
+            {{ form.timezone(class="form-control form-control-lg") }}
+          </div>
+
+          <div class="form-group">
+            {{ form.day_of_week.label(class="form-control-label") }}
+            {{ form.day_of_week(class="form-control form-control-lg") }}
+          </div>
+
+          <div class="form-group">
+            {{ form.timeslots.label(class="form-control-label") }}
+            {{ form.timeslots(class="form-control form-control-lg") }}
+          </div>
+
+      </fieldset>
+      <div class="form-group">
+        {{ form.submit(class= "btn-outline-info") }}
+      </div>
+      <a class="ml-2" href= "{{ url_for('login') }} "></a>
+    </form>
+
+    <div class="border-top pt-3">
+      <small class="text-muted">
+        Already Have an Account? <a class="ml-2" href= "{{ url_for('login') }} ">Sign In</a>
+      </small>
+    </div>
   </div>
-
-  <div>
-
-    <label for="name" >First Name</label>
-    <input type="name"
-           name="name"
-           class="form-control input-sm"
-           placeholder="First Name"
-           required
-           autofocus>
-  </div>
-
-  <div>
-
-    <label for="lname" >Last Name</label>
-    <input type="lname"
-           name="lname"
-           class="form-control input-sm"
-           placeholder="Last Name"
-           required
-           autofocus>
-  </div>
-
-  <div>
-
-    <label for="difficulty-level" >Programming Language Difficulty Level</label>
-    <input type="difficulty-level"
-           name="difficulty-level"
-           class="form-control input-sm"
-           placeholder="Program Language Difficulty Level"
-           required
-           autofocus>
-  </div>
-
-  <div >
-    <label for="password" class="sr-only">Password</label>
-    <input type="password"
-           name="password"
-           class="form-control input"
-           placeholder="Password"
-           required>
-  </div>
-
-  <button class="btn btn-primary btn-block" type="submit">Sign Up
-  </button>
-  </div>
-
-</form>
 </div>
-
 
 {% endblock content %}

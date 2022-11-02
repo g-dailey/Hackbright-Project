@@ -1,14 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, ValidationError, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask_wtf.file import FileField, FileAllowed
 from model import User, Pairing, Meeting, Prompt, TimeSlot, Timezone, Feedback
+# from flask_login import login_user, current_user, logout_user, login_required
 
 
 class SignUpForm(FlaskForm):
   email = StringField('Email', validators=[DataRequired(), Email()])
   first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)])
-  last_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)])
+  last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
   password = PasswordField('Password', validators=[DataRequired()])
   #profile picture?
   prompt_difficulty_level = StringField('Prompt Difficulty Level', validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
@@ -18,9 +19,6 @@ class SignUpForm(FlaskForm):
   #how to make it easy to select slots from day of the week and timeslots quickly rather than manualy entry for every day of the week?
   day_of_week = StringField('Time Slots', validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
   timeslots = StringField('Time Slots', validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
-
-
-
   submit = SubmitField('Sign Up')
 
   def validate_email(self, email):

@@ -168,9 +168,6 @@ def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
 
     print("You have been connected to the db")
 
-class NamerForm(FlaskForm):
-    name = StringField("What's your name")
-    submit = SubmitField("Submit")
 
 if __name__ == "__main__":
     from server import app
