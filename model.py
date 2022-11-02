@@ -1,7 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
 
 db = SQLAlchemy()
 
@@ -161,7 +158,7 @@ class Prompt(db.Model):
             return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link}>"
 
 
-def connect_to_db(flask_app, db_uri="postgresql:///users", echo=True):
+def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

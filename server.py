@@ -5,8 +5,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-
+from model import User, Pairing, Meeting, Prompt, TimeSlot, Timezone, Feedback
 import jinja2
 
 app = Flask(__name__)
