@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField, SelectField, SelectMultipleField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField, SelectField, SelectMultipleField, RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask_wtf.file import FileField, FileAllowed
-from model import User, Pairing, Meeting, Prompt, TimeSlot, Timezone, Feedback
+from model import User, Pairing, Prompt, TimeSlot
 # from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -12,7 +12,7 @@ class SignUpForm(FlaskForm):
   last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
   password = PasswordField('Password', validators=[DataRequired()])
   #profile picture?
-  prompt_difficulty_level = SelectField('Prompt Difficulty Level', choices=[(1, 'Easy'), (2, 'Medium'), (3, 'Hard')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
+  prompt_difficulty_level = RadioField('Prompt Difficulty Level', choices=[(1, 'Easy'), (2, 'Medium'), (3, 'Hard')], validators=[DataRequired()])
   primary_language = SelectField('Primary Language',choices=[('eng', 'English'), ('sp', 'Spanish'), ('fr', 'French'), ('fa', 'Farsi'), ('ge', 'German')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
   programming_language = SelectField('Programming Language', choices=[('cpp', 'C++'), ('py', 'Python'), ('js', 'JavaScript'), ('ja', 'Java'), ('text', 'Plain Text')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
   timezone = SelectField('Timezone', choices=[(1, 'Pacific Time Zone'), (2, 'Central Time Zone'), (3, 'Eastern Time Zone'), (4, 'Alaska Time Zone')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?

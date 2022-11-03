@@ -19,6 +19,8 @@ class User(db.Model):
     prompt_difficulty_level = db.Column(db.String)
     primary_language_id = db.Column(db.Integer, db.ForeignKey("primary_languages.primary_language_id"))
     timezone_id = db.Column(db.Integer, db.ForeignKey("timezones.timezone_id"))
+    timezone_name = db.Column(db.String)
+    primary_language_name = db.Column(db.String)
 
 
     # feedback = db.relationship("Feedback", back_populates="user")
@@ -51,18 +53,6 @@ class UserTimeSlotMapping(db.Model):
     def __repr__(self):
         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
 
-class PrimaryLanguage(db.Model):
-    __tablename__ = "primary_languages"
-
-    primary_language_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    primary_language_name = db.Column(db.String)
-
-    def __repr__(self):
-        return f'<Primary Language primary_language_id={self.primary_language_id} primary_language_name={self.primary_language_name}>'
-
-
 class ProgrammingLanguage(db.Model):
     __tablename__ = "programming_languages"
 
@@ -86,60 +76,23 @@ class UserProgrammingLanguageMapping(db.Model):
     def __repr__(self):
         return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
 
-
-class Timezone(db.Model):
-    __tablename__ = "timezones"
-
-    timezone_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    timezone_name = db.Column(db.String)
-
-    def __repr__(self):
-        return f'<Programming Language timezone_id={self.timezone_id} timezone_name={self.timezone_name}>'
-
-
-class Feedback(db.Model):
-    """Feedback"""
-
-    __tablename__ = "feedback"
-
-    feedback_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-    score = db.Column(db.Integer)
-    feedback_description = db.Column(db.Text)
-    is_prompt_solved = db.Column(db.Boolean)
-    pairing_id = db.Column(db.Integer, db.ForeignKey("pairings.pairing_id"))
-    sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    recipient_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-
-    def __repr__(self):
-            return f"<Feedback feedback_id={self.feedback_id} feedback_description={self.feedback_description} is_prompt_solved={self.is_prompt_solved}>"
-
-
 class Pairing(db.Model):
     """Pairing"""
 
-    __tablename__ = "pairings"
+    __tablename__ = "pairings_sessions"
 
     pairing_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-    meeting_id = db.Column(db.Integer, db.ForeignKey("meetings.meeting_id"))
     user_one_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     user_two_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    meeting_date = db.Column(db.String) #is there a datetime option?
+    feedback_description = db.Column(db.Text)
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    recipient_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    is_prompt_solved = db.Column(db.Boolean)
+    prompt_id = db.Column(db.Integer, db.ForeignKey("prompts.prompt_id"))
 
     def __repr__(self):
             return f"<Pairing pairing_id={self.pairing_id} >" #am I am able to print the foreign key values here?
-
-
-class Meeting(db.Model):
-    """Meeting"""
-
-    __tablename__ = "meetings"
-
-    meeting_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-    meeting_date = db.Column(db.String) #is there a datetime option?
-
-    def __repr__(self):
-            return f"<Meeting meeting_id={self.meeting_id} meeting_date={self.meeting_date}>"
 
 
 class Prompt(db.Model):
