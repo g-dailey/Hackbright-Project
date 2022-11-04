@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -17,10 +18,8 @@ class User(db.Model):
     password = db.Column(db.String)
     profile_picture = db.Column(db.String)
     prompt_difficulty_level = db.Column(db.String)
-    primary_language_id = db.Column(db.Integer, db.ForeignKey("primary_languages.primary_language_id"))
-    timezone_id = db.Column(db.Integer, db.ForeignKey("timezones.timezone_id"))
+    primary_language = db.Column(db.String)
     timezone_name = db.Column(db.String)
-    primary_language_name = db.Column(db.String)
 
 
     # feedback = db.relationship("Feedback", back_populates="user")
@@ -84,7 +83,7 @@ class Pairing(db.Model):
     pairing_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
     user_one_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     user_two_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    meeting_date = db.Column(db.String) #is there a datetime option?
+    # meeting_date = db.Column(db.Datetime, nullable=False) #is there a datetime option?
     feedback_description = db.Column(db.Text)
     sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     recipient_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
@@ -115,9 +114,10 @@ def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
     db.app = flask_app
     db.init_app(flask_app)
+
+
 
     print("You have been connected to the db")
 

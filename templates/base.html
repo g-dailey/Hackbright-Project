@@ -8,22 +8,54 @@
 </head>
 
 <body>
+    <header class="site-header">
 
-    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <img src="/static/project-logo.png" alt="" width="30" height="24">
+            <img src="/static/logo-tag.png" alt="" width="50" height="35">
             <a class="navbar-brand" href="/">Coder Lounge</a>
             <div class="collapse navbar-collapse">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="/register"> <img class="sign-up" >Sign Up</a>
-                    <a class="nav-link" href="/login">Sign In</a>
-
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="/register"> <img class="sign-up" >Sign Up</a>
+                    <a class="nav-item nav-link" href="/login">Sign In</a>
                 </div>
             </div>
         </div>
     </nav>
+</header>
+
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+      </ul>
+    </div>
+  </nav> -->
 
     {% block content%}{% endblock content%}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
 
 
 </body>
