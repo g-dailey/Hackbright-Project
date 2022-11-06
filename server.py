@@ -5,14 +5,13 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from model import User, Pairing,  Prompt, TimeSlot
+from model import User, db, connect_to_db
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
-from model import db
 import json
 
 app = Flask(__name__)
-
+connect_to_db(app)
 
 app.secret_key = "DEV"
 
@@ -36,25 +35,31 @@ def home():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-  form = SignUpForm()
+  form = SignUpForm(request.form)
 
   if form.validate_on_submit():
     print(form)
+    print('***** This is working')
+
     flash(f'Account Created for {form.first_name.data}!', 'success') #this success message is not showing
     user = User(email=form.email.data,
                 password=form.password.data,
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
-                prompt_difficulty_level=form.prompt_difficulty_level.data,
                 primary_language=form.primary_language.data,
+                prompt_difficulty_level=form.prompt_difficulty_level.data,
                 programming_language=form.programming_language.data,
-                timezone=form.timezone.data,
+                timezone_name=form.timezone_name.data,
                 day_of_week=form.day_of_week.data,
                 timeslots=form.timeslots.data
-    )
+              )
+
     db.session.add(user)
     db.session.commit()
+    print(user)
     return redirect('thank-you.html')
+  print('***** This is not working')
+  print(form.errors.items())
   return render_template("register.html", form=form)
 
 

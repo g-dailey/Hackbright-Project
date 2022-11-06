@@ -20,94 +20,98 @@ class User(db.Model):
     prompt_difficulty_level = db.Column(db.String)
     primary_language = db.Column(db.String)
     timezone_name = db.Column(db.String)
-
+    programming_language = db.Column(db.ARRAY(db.String))
+    timeslots = db.Column(db.ARRAY(db.String))
+    day_of_week = db.Column(db.ARRAY(db.String))
+    #User.query.get(7).__dict__
+    #_[0].__dict__
 
     # feedback = db.relationship("Feedback", back_populates="user")
 
     def __repr__(self):
         return f'<User user_id={self.user_id} first_name={self.first_name} last_name={self.last_name} email={self.email}>'
 
-class TimeSlot(db.Model):
-    __tablename__ = "timeslots"
+# class TimeSlot(db.Model):
+#     __tablename__ = "timeslots"
 
-    timeslot_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    timeslot_name = db.Column(db.String)
-    day_of_the_week = db.Column(db.String)
+#     timeslot_id = db.Column(db.Integer,
+#                         autoincrement= True,
+#                         primary_key= True)
+#     timeslot_name = db.Column(db.ARRAY(db.String))
+#     day_of_the_week = db.Column(db.ARRAY(db.String))
 
-    def __repr__(self):
-        return f'<TimeSlot timeslot_id={self.timeslot_id} timeslot_name={self.timeslot_name}>'
-
-
-class UserTimeSlotMapping(db.Model):
-    __tablename__ = "users_timeslot_mapping"
-
-    user_timeslot_mapping_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    timeslot_id = db.Column(db.Integer, db.ForeignKey("timeslots.timeslot_id"))
+#     def __repr__(self):
+#         return f'<TimeSlot timeslot_id={self.timeslot_id} timeslot_name={self.timeslot_name}>'
 
 
-    def __repr__(self):
-        return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
+# class UserTimeSlotMapping(db.Model):
+#     __tablename__ = "users_timeslot_mapping"
 
-class ProgrammingLanguage(db.Model):
-    __tablename__ = "programming_languages"
-
-    programming_language_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    programming_language_name = db.Column(db.String)
-
-    def __repr__(self):
-        return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
-
-class UserProgrammingLanguageMapping(db.Model):
-    __tablename__ = "users_programming_language_mapping"
-
-    user_programming_language_mapping_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    programming_language_id = db.Column(db.Integer, db.ForeignKey("programming_languages.programming_language_id"))
+#     user_timeslot_mapping_id = db.Column(db.Integer,
+#                         autoincrement= True,
+#                         primary_key= True)
+#     timeslot_id = db.Column(db.Integer, db.ForeignKey("timeslots.timeslot_id"))
 
 
-    def __repr__(self):
-        return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
+#     def __repr__(self):
+#         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
 
-class Pairing(db.Model):
-    """Pairing"""
+# class ProgrammingLanguage(db.Model):
+#     __tablename__ = "programming_languages"
 
-    __tablename__ = "pairings_sessions"
+#     programming_language_id = db.Column(db.Integer,
+#                         autoincrement= True,
+#                         primary_key= True)
+#     programming_language_name = db.Column(db.String)
 
-    pairing_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-    user_one_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    user_two_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    # meeting_date = db.Column(db.Datetime, nullable=False) #is there a datetime option?
-    feedback_description = db.Column(db.Text)
-    sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    recipient_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    is_prompt_solved = db.Column(db.Boolean)
-    prompt_id = db.Column(db.Integer, db.ForeignKey("prompts.prompt_id"))
+#     def __repr__(self):
+#         return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
 
-    def __repr__(self):
-            return f"<Pairing pairing_id={self.pairing_id} >" #am I am able to print the foreign key values here?
+# class UserProgrammingLanguageMapping(db.Model):
+#     __tablename__ = "users_programming_language_mapping"
+
+#     user_programming_language_mapping_id = db.Column(db.Integer,
+#                         autoincrement= True,
+#                         primary_key= True)
+#     programming_language_id = db.Column(db.Integer, db.ForeignKey("programming_languages.programming_language_id"))
 
 
-class Prompt(db.Model):
-    """Prompt"""
+#     def __repr__(self):
+#         return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
 
-    __tablename__ = "prompts"
+# class Pairing(db.Model):
+#     """Pairing"""
 
-    prompt_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-    prompt_name = db.Column(db.String)
-    prompt_link = db.Column(db.String)
+#     __tablename__ = "pairings_sessions"
 
-    # prompt = db.relationship("Prompt", back_populates="feedback")
-    # user = db.relationship("User", back_populates="feedback")
+#     pairing_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
+#     user_one_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+#     user_two_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+#     # meeting_date = db.Column(db.Datetime, nullable=False) #is there a datetime option?
+#     feedback_description = db.Column(db.Text)
+#     sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+#     recipient_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+#     is_prompt_solved = db.Column(db.Boolean)
+#     prompt_id = db.Column(db.Integer, db.ForeignKey("prompts.prompt_id"))
 
-    def __repr__(self):
-            return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link}>"
+#     def __repr__(self):
+#             return f"<Pairing pairing_id={self.pairing_id} >" #am I am able to print the foreign key values here?
+
+
+# class Prompt(db.Model):
+#     """Prompt"""
+
+#     __tablename__ = "prompts"
+
+#     prompt_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
+#     prompt_name = db.Column(db.String)
+#     prompt_link = db.Column(db.String)
+
+#     # prompt = db.relationship("Prompt", back_populates="feedback")
+#     # user = db.relationship("User", back_populates="feedback")
+
+#     def __repr__(self):
+#             return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link}>"
 
 
 def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
