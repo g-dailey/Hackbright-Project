@@ -14,7 +14,7 @@ app = Flask(__name__)
 connect_to_db(app)
 
 app.secret_key = "DEV"
-
+@app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def home():
   return render_template("homepage.html")
@@ -41,7 +41,7 @@ def register():
     print(form)
     print('***** This is working')
 
-    flash(f'Account Created for {form.first_name.data}!', 'success') #this success message is not showing
+    flash(f'Account Created for {form.first_name.data}! You can now login!', 'success') #this success message is not showing
     user = User(email=form.email.data,
                 password=form.password.data,
                 first_name=form.first_name.data,
@@ -57,7 +57,7 @@ def register():
     db.session.add(user)
     db.session.commit()
     print(user)
-    return redirect('thank-you.html')
+    return redirect(url_for('login'))
   print('***** This is not working')
   print(form.errors.items())
   return render_template("register.html", form=form)
@@ -65,8 +65,19 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
   form = LoginForm()
-  return render_template("login.html", form=form)
+  if form.validate_on_submit():
+    user = User.query.filter_by(email=form.email.data).first()
+    if user:
+      password = User.query.filter_by(password=form.password.data).first()
+
+      return redirect(url_for('register'))
+    else:
+      flash('Login Failed, please check email and password', 'danger')
+
+  return render_template('login.html', form=form)
+
 
 @app.route("/thank-you", methods=['GET', 'POST'])
 def thankyou():

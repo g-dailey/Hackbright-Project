@@ -4,7 +4,7 @@
 
 <div class="container">
   <div class="content-section">
-    <form method="POST" action="">
+    <form method="POST" action="/login">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
           <legend class="border-bottom mb-4"> Sign In </legend>
@@ -42,7 +42,7 @@
       <div class="form-group">
         {{ form.submit(class= "btn-outline-info") }}
       </div>
-      <a class="ml-2" href= "{{ url_for('login') }} "></a>
+      <a class="ml-2" href= "{{ url_for('home') }} "></a>
     </form>
 
 
