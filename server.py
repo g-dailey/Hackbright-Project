@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, redirect, flash, session, request, url_for
+from flask import Flask, jsonify, render_template, redirect, flash, session, request, url_for
 # from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -103,6 +103,20 @@ def login():
 
   return render_template('login.html', form=form)
 
+
+@app.route('/home/users')
+def get_melons():
+
+    users = User.query.all()
+    return jsonify({user.email: [user.first_name, user.last_name, user.timezone_name,
+                    user.primary_language, user.prompt_difficulty_level] for user in users})
+
+
+# @app.route('/home/users/<email>')
+# def get_melon(email):
+
+#     users = User.query.get(email)
+#     return jsonify(users.to_dict())
 
 @app.route("/thank-you", methods=['GET', 'POST'])
 def thankyou():
