@@ -5,7 +5,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from model import User, db, connect_to_db
+from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, connect_to_db, db
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
@@ -48,15 +48,40 @@ def register():
                 last_name=form.last_name.data,
                 primary_language=form.primary_language.data,
                 prompt_difficulty_level=form.prompt_difficulty_level.data,
-                programming_language=form.programming_language.data,
-                timezone_name=form.timezone_name.data,
-                day_of_week=form.day_of_week.data,
-                timeslots=form.timeslots.data
+                # programming_language=form.programming_language.data,
+                timezone_name=form.timezone_name.data
               )
 
     db.session.add(user)
     db.session.commit()
-    print(user)
+
+    timeslot = TimeSlot(
+                day_of_the_week=form.day_of_week.data,
+                timeslot_name=form.timeslots.data)
+    db.session.add(timeslot)
+    db.session.commit()
+
+
+    timeslotmapping = UserTimeSlotMapping(
+      user_id = user.user_id,
+      timeslot_id = timeslot.timeslot_id)
+
+    db.session.add(timeslotmapping)
+    db.session.commit()
+
+    programming_lang = ProgrammingLanguage(
+                programming_language=form.programming_language.data)
+    db.session.add(programming_lang)
+    db.session.commit()
+
+
+    prog_lang_mapping = UserProgrammingLanguageMapping(
+      user_id = user.user_id,
+      programming_language_id = programming_lang.programming_language_id)
+
+    db.session.add(prog_lang_mapping)
+    db.session.commit()
+
     return redirect(url_for('login'))
   print('***** This is not working')
   print(form.errors.items())
@@ -72,9 +97,9 @@ def login():
     if user:
       password = User.query.filter_by(password=form.password.data).first()
 
-      return redirect(url_for('register'))
+      return redirect(url_for('home'))
     else:
-      flash('Login Failed, please check email and password', 'danger')
+      flash('Login Failed, please check email and password and try again!', 'danger')
 
   return render_template('login.html', form=form)
 

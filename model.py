@@ -16,13 +16,13 @@ class User(db.Model):
     last_name = db.Column(db.String)
     email = db.Column(db.String, unique= True)
     password = db.Column(db.String)
-    profile_picture = db.Column(db.String)
+    profile_picture = db.Column(db.String, default='default-image.jpeg')
     prompt_difficulty_level = db.Column(db.String)
     primary_language = db.Column(db.String)
     timezone_name = db.Column(db.String)
-    programming_language = db.Column(db.ARRAY(db.String))
-    timeslots = db.Column(db.ARRAY(db.String))
-    day_of_week = db.Column(db.ARRAY(db.String))
+    # programming_language = db.Column(db.ARRAY(db.String))
+    # timeslots = db.Column(db.ARRAY(db.String))
+    # day_of_week = db.Column(db.ARRAY(db.String))
     #User.query.get(7).__dict__
     #_[0].__dict__
 
@@ -31,53 +31,55 @@ class User(db.Model):
     def __repr__(self):
         return f'<User user_id={self.user_id} first_name={self.first_name} last_name={self.last_name} email={self.email}>'
 
-# class TimeSlot(db.Model):
-#     __tablename__ = "timeslots"
+class TimeSlot(db.Model):
+    __tablename__ = "timeslots"
 
-#     timeslot_id = db.Column(db.Integer,
-#                         autoincrement= True,
-#                         primary_key= True)
-#     timeslot_name = db.Column(db.ARRAY(db.String))
-#     day_of_the_week = db.Column(db.ARRAY(db.String))
+    timeslot_id = db.Column(db.Integer,
+                        autoincrement= True,
+                        primary_key= True)
+    timeslot_name = db.Column(db.ARRAY(db.String))
+    day_of_the_week = db.Column(db.ARRAY(db.String))
 
-#     def __repr__(self):
-#         return f'<TimeSlot timeslot_id={self.timeslot_id} timeslot_name={self.timeslot_name}>'
-
-
-# class UserTimeSlotMapping(db.Model):
-#     __tablename__ = "users_timeslot_mapping"
-
-#     user_timeslot_mapping_id = db.Column(db.Integer,
-#                         autoincrement= True,
-#                         primary_key= True)
-#     timeslot_id = db.Column(db.Integer, db.ForeignKey("timeslots.timeslot_id"))
+    def __repr__(self):
+        return f'<TimeSlot timeslot_id={self.timeslot_id} timeslot_name={self.timeslot_name}>'
 
 
-#     def __repr__(self):
-#         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
+class UserTimeSlotMapping(db.Model):
+    __tablename__ = "users_timeslot_mapping"
 
-# class ProgrammingLanguage(db.Model):
-#     __tablename__ = "programming_languages"
-
-#     programming_language_id = db.Column(db.Integer,
-#                         autoincrement= True,
-#                         primary_key= True)
-#     programming_language_name = db.Column(db.String)
-
-#     def __repr__(self):
-#         return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
-
-# class UserProgrammingLanguageMapping(db.Model):
-#     __tablename__ = "users_programming_language_mapping"
-
-#     user_programming_language_mapping_id = db.Column(db.Integer,
-#                         autoincrement= True,
-#                         primary_key= True)
-#     programming_language_id = db.Column(db.Integer, db.ForeignKey("programming_languages.programming_language_id"))
+    user_timeslot_mapping_id = db.Column(db.Integer,
+                        autoincrement= True,
+                        primary_key= True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    timeslot_id = db.Column(db.Integer, db.ForeignKey("timeslots.timeslot_id"))
 
 
-#     def __repr__(self):
-#         return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
+    def __repr__(self):
+        return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
+
+class ProgrammingLanguage(db.Model):
+    __tablename__ = "programming_languages"
+
+    programming_language_id = db.Column(db.Integer,
+                        autoincrement= True,
+                        primary_key= True)
+    programming_language = db.Column(db.ARRAY(db.String))
+
+    def __repr__(self):
+        return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
+
+class UserProgrammingLanguageMapping(db.Model):
+    __tablename__ = "users_programming_language_mapping"
+
+    user_programming_language_mapping_id = db.Column(db.Integer,
+                        autoincrement= True,
+                        primary_key= True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    programming_language_id = db.Column(db.Integer, db.ForeignKey("programming_languages.programming_language_id"))
+
+
+    def __repr__(self):
+        return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
 
 # class Pairing(db.Model):
 #     """Pairing"""
