@@ -1,11 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy.orm import relationship, Session
 
 db = SQLAlchemy()
 
 
 class User(db.Model):
-    """A user."""
 
     __tablename__ = "users"
 
@@ -20,16 +20,43 @@ class User(db.Model):
     prompt_difficulty_level = db.Column(db.String)
     primary_language = db.Column(db.String)
     timezone_name = db.Column(db.String)
-    # programming_language = db.Column(db.ARRAY(db.String))
-    # timeslots = db.Column(db.ARRAY(db.String))
-    # day_of_week = db.Column(db.ARRAY(db.String))
+    programming_languages = relationship('ProgrammingLanguage', secondary='users_programming_language_mapping', back_populates='users')
+
     #User.query.get(7).__dict__
     #_[0].__dict__
 
-    # feedback = db.relationship("Feedback", back_populates="user")
-
     def __repr__(self):
         return f'<User user_id={self.user_id} first_name={self.first_name} last_name={self.last_name} email={self.email}>'
+
+
+class ProgrammingLanguage(db.Model):
+    __tablename__ = "programming_languages"
+
+    programming_language_id = db.Column(db.Integer,
+                        autoincrement= True,
+                        primary_key= True)
+
+    programming_language_name = db.Column(db.String)
+    programming_language_label = db.Column(db.String)
+    users = relationship('User', secondary='users_programming_language_mapping', back_populates='programming_languages')
+
+    def __repr__(self):
+        return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
+
+class UserProgrammingLanguageMapping(db.Model):
+    __tablename__ = "users_programming_language_mapping"
+
+    user_programming_language_mapping_id = db.Column(db.Integer,
+                        autoincrement= True,
+                        primary_key= True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    programming_language_id = db.Column(db.Integer, db.ForeignKey("programming_languages.programming_language_id"))
+
+
+    def __repr__(self):
+        return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
+
+
 
 class TimeSlot(db.Model):
     __tablename__ = "timeslots"
@@ -39,6 +66,32 @@ class TimeSlot(db.Model):
                         primary_key= True)
     timeslot_name = db.Column(db.ARRAY(db.String))
     day_of_the_week = db.Column(db.ARRAY(db.String))
+
+
+
+#     class User(Base):
+#     tablename = "users"
+
+#     id = Column(Integer, primary_key=True)
+#     name = Column(String)
+#     projects = relationship('Project', secondary='project_users', back_populates='users')
+
+
+# class Project(Base):
+#     tablename = "projects"
+
+#     id = Column(Integer, primary_key=True)
+#     name = Column(String)
+#     users = relationship('User', secondary='project_users', back_populates='projects')
+
+
+# class ProjectUser(Base):
+#     tablename = "project_users"
+
+#     id = Column(Integer, primary_key=True)
+#     notes = Column(String, nullable=True)
+#     user_id = Column(Integer, ForeignKey('users.id'))
+#     project_id = Column(Integer, ForeignKey('projects.id'))
 
     def __repr__(self):
         return f'<TimeSlot timeslot_id={self.timeslot_id} timeslot_name={self.timeslot_name}>'
@@ -57,29 +110,12 @@ class UserTimeSlotMapping(db.Model):
     def __repr__(self):
         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
 
-class ProgrammingLanguage(db.Model):
-    __tablename__ = "programming_languages"
+# result = db.session.query(User, UserProgrammingLanguageMapping).join(User).all()
 
-    programming_language_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    programming_language = db.Column(db.ARRAY(db.String))
-
-    def __repr__(self):
-        return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
-
-class UserProgrammingLanguageMapping(db.Model):
-    __tablename__ = "users_programming_language_mapping"
-
-    user_programming_language_mapping_id = db.Column(db.Integer,
-                        autoincrement= True,
-                        primary_key= True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    programming_language_id = db.Column(db.Integer, db.ForeignKey("programming_languages.programming_language_id"))
+# for user, userprogramminglanguagemapping in result:
+#     print(user.first_name, userprogramminglanguagemapping.programming_language_id)
 
 
-    def __repr__(self):
-        return f'<Programming Language Mapping user_programming_language_mapping_id={self.user_programming_language_mapping_id} programming_language_id={self.programming_language_id}>'
 
 # class Pairing(db.Model):
 #     """Pairing"""
@@ -127,6 +163,12 @@ def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
 
     print("You have been connected to the db")
 
+def populate_initial_db():
+    programming_language_py = ProgrammingLanguage(programming_language_name = 'Python', programming_language_label = 'py')
+    programming_language_js = ProgrammingLanguage(programming_language_name = 'Javascript', programming_language_label = 'js')
+
+    db.session.add_all([programming_language_py, programming_language_js])
+    db.session.commit()
 
 if __name__ == "__main__":
     from server import app

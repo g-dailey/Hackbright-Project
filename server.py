@@ -1,6 +1,5 @@
 
 from flask import Flask, jsonify, render_template, redirect, flash, session, request, url_for
-# from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
@@ -20,25 +19,12 @@ def home():
   return render_template("homepage.html")
 
 
-# @app.route("/api/v1/user", methods=["POST"])
-# def get_data():
-#   data = request.json()
-#   user_name = data['username']
-#   user_name = request.args.get('username')
-#   crud.create_user(user_name=user_name)
-
-#   response = {"response_code": 200,
-#   "message": "Welcome to the Site"}
-
-#   return jsonify(response)
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
   form = SignUpForm(request.form)
 
   if form.validate_on_submit():
-    print(form)
     print('***** This is working')
 
     flash(f'Account Created for {form.first_name.data}! You can now login!', 'success') #this success message is not showing
@@ -48,7 +34,6 @@ def register():
                 last_name=form.last_name.data,
                 primary_language=form.primary_language.data,
                 prompt_difficulty_level=form.prompt_difficulty_level.data,
-                # programming_language=form.programming_language.data,
                 timezone_name=form.timezone_name.data
               )
 
@@ -69,22 +54,20 @@ def register():
     db.session.add(timeslotmapping)
     db.session.commit()
 
-    programming_lang = ProgrammingLanguage(
-                programming_language=form.programming_language.data)
-    db.session.add(programming_lang)
-    db.session.commit()
-
-
-    prog_lang_mapping = UserProgrammingLanguageMapping(
-      user_id = user.user_id,
-      programming_language_id = programming_lang.programming_language_id)
-
-    db.session.add(prog_lang_mapping)
+    # programming_lang = ProgrammingLanguage(
+    #             programming_language_name=form.programming_language.data)
+    # db.session.add(programming_lang)
+    # db.session.commit()
+    for language in form.programming_language_labels.data:
+      print(language)
+      db_language = ProgrammingLanguage.query.filter(ProgrammingLanguage.programming_language_label == language).first()
+      prog_lang_mapping = UserProgrammingLanguageMapping(
+        user_id = user.user_id,
+        programming_language_id = db_language.programming_language_id)
+      db.session.add(prog_lang_mapping)
     db.session.commit()
 
     return redirect(url_for('login'))
-  print('***** This is not working')
-  print(form.errors.items())
   return render_template("register.html", form=form)
 
 
@@ -103,14 +86,28 @@ def login():
 
   return render_template('login.html', form=form)
 
+# route for pairing info:
+# pair the user based on info selected.
 
 @app.route('/home/users')
-def get_melons():
+def get_users():
+  # test = request("https://leetcode.com/problems/random-one-question/all")
+  users = User.query.all()
+  for user in users:
+    print(user.programming_languages)
+  return render_template('user_list.html', users=users)
 
-    users = User.query.all()
-    return jsonify({user.email: [user.first_name, user.last_name, user.timezone_name,
-                    user.primary_language, user.prompt_difficulty_level] for user in users})
 
+
+  return render_template('user_list.html', test=test)
+
+    # users = User.query.all()
+    # return jsonify({user.email: [user.first_name, user.last_name, user.timezone_name,
+    #                 user.primary_language, user.prompt_difficulty_level] for user in users})
+
+  #for user in users:
+  #   print(user.ProgrammingLanguage[relationshipname].programming_language)
+  # return render_template()
 
 # @app.route('/home/users/<email>')
 # def get_melon(email):

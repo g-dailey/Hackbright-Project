@@ -14,7 +14,7 @@ class SignUpForm(FlaskForm):
   #profile picture?
   prompt_difficulty_level = RadioField('Prompt Difficulty Level', choices=[(1, 'Easy'), (2, 'Medium'), (3, 'Hard')], validators=[DataRequired()])
   primary_language = SelectField('Primary Language',choices=[('eng', 'English'), ('sp', 'Spanish'), ('fr', 'French'), ('fa', 'Farsi'), ('ge', 'German')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
-  programming_language = SelectMultipleField('Programming Language', choices=[('C++', 'C++'), ('py', 'Python'), ('js', 'JavaScript'), ('ja', 'Java'), ('text', 'Plain Text')]) #how to make this a multiple select field and still exist in this form?
+  programming_language_labels = SelectMultipleField('Programming Language', choices=[('C++', 'C++'), ('py', 'Python'), ('js', 'JavaScript'), ('ja', 'Java'), ('text', 'Plain Text')]) #how to make this a multiple select field and still exist in this form?
   timezone_name = SelectField('Timezone', choices=[('1', 'Pacific Time Zone'), ('2', 'Central Time Zone'), ('3', 'Eastern Time Zone'), ('4', 'Alaska Time Zone')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
   # how to make it easy to select slots from day of the week and timeslots quickly rather than manualy entry for every day of the week?
   day_of_week = SelectMultipleField('Day of the Week', choices=[('1', 'Sunday'), ('2', 'Monday'), ('3', 'Tuesday'), ('4', 'Wednesday'), ('5', 'Thursday'), ('6', 'Friday'), ('7', 'Saturday')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
