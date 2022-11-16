@@ -66,6 +66,8 @@ class TimeSlot(db.Model):
                         primary_key= True)
     timeslot_name = db.Column(db.ARRAY(db.String))
     day_of_the_week = db.Column(db.ARRAY(db.String))
+    # users = relationship('User', secondary='users_timeslot_mapping', back_populates='programming_languages')
+
 
 
 

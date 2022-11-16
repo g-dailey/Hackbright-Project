@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<br>
+<br>
 
 <p>To get paired with a programmer, please contant the following programmers
 who have chosen the same programming language, timezone, timeslots, and primary language.</p>
@@ -9,6 +11,8 @@ who have chosen the same programming language, timezone, timeslots, and primary 
   <thead>
     <tr>
 
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
       <th scope="col">Email</th>
       <th scope="col">Programming Language 1</th>
       <th scope="col">Programming Language 2</th>
@@ -19,14 +23,15 @@ who have chosen the same programming language, timezone, timeslots, and primary 
 
   {% for user in users %}
   <TR>
-
-     <TD class="c2">{{user.email}}</TD>
+     <TD class="c2">{{user.first_name}}</TD>
+     <TD class="c3">{{user.last_name}}</TD>
+     <TD class="c4">{{user.email}}</TD>
      {% for lang in user.programming_languages %}
-     <TD class="c3">{{ lang.programming_language_name}},</TD>
+     <TD class="c5">{{ lang.programming_language_name}}</TD>
 
       {% endfor %}
       {% endfor %}
-  <TD class="c5"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
+  <TD class="c6"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
 </TR>
   </table>
 
