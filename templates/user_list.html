@@ -8,7 +8,7 @@ who have chosen the same programming language, timezone, timeslots, and primary 
 {% for user in users %}
   {{ user.email }}
   {% for lang in user.programming_languages %}
-  {{ lang.programming_language_name}}
+  {{ lang.programming_language_name}},
 
   {% endfor %}
   <br>

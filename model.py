@@ -166,8 +166,13 @@ def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
 def populate_initial_db():
     programming_language_py = ProgrammingLanguage(programming_language_name = 'Python', programming_language_label = 'py')
     programming_language_js = ProgrammingLanguage(programming_language_name = 'Javascript', programming_language_label = 'js')
+    programming_language_ja = ProgrammingLanguage(programming_language_name = 'Java', programming_language_label = 'ja')
+    prog_language_c_plus_plus = ProgrammingLanguage(programming_language_name = 'C++', programming_language_label = 'C++')
+    prog_language_c = ProgrammingLanguage(programming_language_name = 'C', programming_language_label = 'C')
 
-    db.session.add_all([programming_language_py, programming_language_js])
+
+
+    db.session.add_all([programming_language_py, programming_language_js, programming_language_ja, prog_language_c_plus_plus, prog_language_c])
     db.session.commit()
 
 if __name__ == "__main__":

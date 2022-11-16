@@ -58,8 +58,7 @@ def register():
     #             programming_language_name=form.programming_language.data)
     # db.session.add(programming_lang)
     # db.session.commit()
-    for language in form.programming_language_labels.data:
-      print(language)
+    for language in form.programming_language_label.data:
       db_language = ProgrammingLanguage.query.filter(ProgrammingLanguage.programming_language_label == language).first()
       prog_lang_mapping = UserProgrammingLanguageMapping(
         user_id = user.user_id,
@@ -94,12 +93,10 @@ def get_users():
   # test = request("https://leetcode.com/problems/random-one-question/all")
   users = User.query.all()
   for user in users:
-    print(user.programming_languages)
+    pass
+    # print(user.programming_languages)
   return render_template('user_list.html', users=users)
 
-
-
-  return render_template('user_list.html', test=test)
 
     # users = User.query.all()
     # return jsonify({user.email: [user.first_name, user.last_name, user.timezone_name,
