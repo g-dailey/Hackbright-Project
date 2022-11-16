@@ -5,13 +5,29 @@
 <p>To get paired with a programmer, please contant the following programmers
 who have chosen the same programming language, timezone, timeslots, and primary language.</p>
 
-{% for user in users %}
-  {{ user.email }}
-  {% for lang in user.programming_languages %}
-  {{ lang.programming_language_name}},
+<table class="table table-striped">
+  <thead>
+    <tr>
 
-  {% endfor %}
-  <br>
-{% endfor %}
+      <th scope="col">Email</th>
+      <th scope="col">Programming Language 1</th>
+      <th scope="col">Programming Language 2</th>
+      <th scope="col">Programming Language 3</th>
+      <th scope="col">Prompt</th>
+    </tr>
+  </thead>
+
+  {% for user in users %}
+  <TR>
+
+     <TD class="c2">{{user.email}}</TD>
+     {% for lang in user.programming_languages %}
+     <TD class="c3">{{ lang.programming_language_name}},</TD>
+
+      {% endfor %}
+      {% endfor %}
+  <TD class="c5"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
+</TR>
+  </table>
 
 {% endblock content %}
