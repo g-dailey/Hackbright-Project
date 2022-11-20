@@ -71,15 +71,10 @@
           </div>
             {{ form.timezone_name(size=5, class="form-control form-control-lg") }}
 
-            <div class="form-group">
-              {{ form.day_of_week.label(class="form-control-label") }}
-            </div>
-              {{ form.day_of_week(size=5, class="form-control form-control-lg", multiple=True) }}
-
               <div class="form-group">
-                {{ form.timeslots.label(class="form-control-label") }}
+                {{ form.timeslot_label.label(class="form-control-label") }}
               </div>
-                {{ form.timeslots(size=5, class="form-control form-control-lg", multiple=True) }}
+                {{ form.timeslot_label(size=5, class="form-control form-control-lg", multiple=True) }}
 
       </fieldset>
       <div class="form-group">

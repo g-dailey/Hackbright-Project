@@ -1,21 +1,18 @@
+import pandas as pd
+import csv
 
-          # <div class="form-group"></div>
-          #   {{ form.programming_language.label(class="form-control-label") }}
-          # </div>
-          #   {{ form.programming_language(class="form-control form-control-lg") }}
+filename = 'Leetcode-data - leetcode (1).csv'
+
+with open(filename, 'r') as csvfile:
+    datareader = csv.reader(csvfile)
+    for row in datareader:
+      split_data = row[0].split("--")
+      prompt_name, prompt_link, prompt_difficulty = split_data
+      print(prompt_name)
+
+        # print(row)
 
 
-          # <div class="form-group">
-          #   {{ form.timezone.label(class="form-control-label") }}
-          #   {{ form.timezone(class="form-control form-control-lg") }}
-          # </div>
-
-          # <div class="form-group">
-          #   {{ form.day_of_week.label(class="form-control-label") }}
-          #   {{ form.day_of_week(class="form-control form-control-lg") }}
-          # </div>
-
-          # <div class="form-group">
-          #   {{ form.timeslots.label(class="form-control-label") }}
-          #   {{ form.timeslots(class="form-control form-control-lg") }}
-          # </div>
+# leetcode_prompt = pd.read_csv('Leetcode-data - leetcode.csv')
+# leetcode_data = pd.DataFrame(leetcode_prompt)
+# print(type(leetcode_data))

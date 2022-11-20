@@ -1,6 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy.orm import relationship, Session
+from flask_bcrypt import Bcrypt
+import pandas as pd
+import csv
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 db = SQLAlchemy()
 
@@ -21,9 +25,13 @@ class User(db.Model):
     primary_language = db.Column(db.String)
     timezone_name = db.Column(db.String)
     programming_languages = relationship('ProgrammingLanguage', secondary='users_programming_language_mapping', back_populates='users')
-
+    selected_timeslots = relationship('TimeSlot', secondary='users_timeslot_mapping', back_populates='users_timeslots')
     #User.query.get(7).__dict__
     #_[0].__dict__
+
+    # def get_reset_token(self, expires_sec=1800):
+    #     s = Serializer(app.config['SECRET_KEY'], expires_sec)
+    #     return s.dumps({'user_id': self.user_id}).decode('utf-8')
 
     def __repr__(self):
         return f'<User user_id={self.user_id} first_name={self.first_name} last_name={self.last_name} email={self.email}>'
@@ -64,36 +72,10 @@ class TimeSlot(db.Model):
     timeslot_id = db.Column(db.Integer,
                         autoincrement= True,
                         primary_key= True)
-    timeslot_name = db.Column(db.ARRAY(db.String))
-    day_of_the_week = db.Column(db.ARRAY(db.String))
-    # users = relationship('User', secondary='users_timeslot_mapping', back_populates='programming_languages')
-
-
-
-
-#     class User(Base):
-#     tablename = "users"
-
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String)
-#     projects = relationship('Project', secondary='project_users', back_populates='users')
-
-
-# class Project(Base):
-#     tablename = "projects"
-
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String)
-#     users = relationship('User', secondary='project_users', back_populates='projects')
-
-
-# class ProjectUser(Base):
-#     tablename = "project_users"
-
-#     id = Column(Integer, primary_key=True)
-#     notes = Column(String, nullable=True)
-#     user_id = Column(Integer, ForeignKey('users.id'))
-#     project_id = Column(Integer, ForeignKey('projects.id'))
+    timeslot_name = db.Column(db.String)
+    timeslot_label = db.Column(db.String)
+    # day_of_the_week = db.Column(db.String)
+    users_timeslots = relationship('User', secondary='users_timeslot_mapping', back_populates='selected_timeslots')
 
     def __repr__(self):
         return f'<TimeSlot timeslot_id={self.timeslot_id} timeslot_name={self.timeslot_name}>'
@@ -108,15 +90,8 @@ class UserTimeSlotMapping(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     timeslot_id = db.Column(db.Integer, db.ForeignKey("timeslots.timeslot_id"))
 
-
     def __repr__(self):
         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
-
-# result = db.session.query(User, UserProgrammingLanguageMapping).join(User).all()
-
-# for user, userprogramminglanguagemapping in result:
-#     print(user.first_name, userprogramminglanguagemapping.programming_language_id)
-
 
 
 # class Pairing(db.Model):
@@ -137,33 +112,78 @@ class UserTimeSlotMapping(db.Model):
 #     def __repr__(self):
 #             return f"<Pairing pairing_id={self.pairing_id} >" #am I am able to print the foreign key values here?
 
+######
+# Prompts Table
+# figure out the query to get data from LeetCode API
+# urllib to make requests
+# once the response is received, use another library to turn json response to object.
 
-# class Prompt(db.Model):
-#     """Prompt"""
+class Prompt(db.Model):
+    """Prompt"""
 
-#     __tablename__ = "prompts"
+    __tablename__ = "prompts"
 
-#     prompt_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-#     prompt_name = db.Column(db.String)
-#     prompt_link = db.Column(db.String)
+    prompt_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
+    prompt_name = db.Column(db.String)
+    prompt_link = db.Column(db.String)
+    prompt_difficulty = db.Column(db.String)
 
-#     # prompt = db.relationship("Prompt", back_populates="feedback")
-#     # user = db.relationship("User", back_populates="feedback")
-
-#     def __repr__(self):
-#             return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link}>"
-
+    def __repr__(self):
+            return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link} prompt_difficulty={self.prompt_difficulty}>"
 
 def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    bcrypt = Bcrypt(flask_app)
     db.app = flask_app
+
     db.init_app(flask_app)
 
 
 
     print("You have been connected to the db")
+
+prompt_filename = 'Leetcode-data - leetcode.csv'
+
+def populate_prompt_tb():
+
+    with open(prompt_filename, 'r') as csvfile:
+        datareader = csv.reader(csvfile)
+        for row in datareader:
+            split_data = row[0].split("--")
+            prompt_name_data, prompt_link_data, prompt_difficulty_data = split_data
+            populate_prompt = Prompt(prompt_name = prompt_name_data, prompt_link = prompt_link_data, prompt_difficulty = prompt_difficulty_data )
+            db.session.add(populate_prompt)
+            db.session.commit()
+
+user_filename = 'User-data.csv'
+
+
+def populate_user_tb():
+
+    with open(user_filename, 'r') as csvfile:
+        datareader = csv.reader(csvfile)
+        for row in datareader:
+            split_data = row[0].split("--")
+
+            first_name_data, last_name_data, email_data, pwd_data, prompt_diff_data, primary_lang_data, timezone_data, prog_name_data, selected_timeslots_data = split_data
+
+
+
+            # breakpoint()
+            populate_user = User(first_name = first_name_data, last_name = last_name_data, email = email_data, password = pwd_data, prompt_difficulty_level=prompt_diff_data,primary_language=primary_lang_data, timezone_name= timezone_data )
+
+            db.session.add(populate_user)
+            db.session.commit()
+            user_id = User.query.filter_by(email=email_data).first().user_id
+            get_timeslot_id = TimeSlot.query.filter_by(timeslot_name = selected_timeslots_data).one().timeslot_id
+            populate_timeslot = UserTimeSlotMapping(user_id=user_id, timeslot_id=get_timeslot_id)
+
+            db.session.add(populate_timeslot)
+            db.session.commit()
+
+
 
 def populate_initial_db():
     programming_language_py = ProgrammingLanguage(programming_language_name = 'Python', programming_language_label = 'py')
@@ -171,8 +191,21 @@ def populate_initial_db():
     programming_language_ja = ProgrammingLanguage(programming_language_name = 'Java', programming_language_label = 'ja')
     prog_language_c_plus_plus = ProgrammingLanguage(programming_language_name = 'C++', programming_language_label = 'C++')
     prog_language_c = ProgrammingLanguage(programming_language_name = 'C', programming_language_label = 'C')
-    db.session.add_all([programming_language_py, programming_language_js, programming_language_ja, prog_language_c_plus_plus, prog_language_c])
+    timeslot_7am = TimeSlot(timeslot_name = '7am - 10am', timeslot_label = '7am')
+    timeslot_10am = TimeSlot(timeslot_name = '10am - 1pm', timeslot_label = '10am')
+    timeslot_1pm = TimeSlot(timeslot_name = '1pm - 4pm', timeslot_label = '1pm')
+    timeslot_4pm = TimeSlot(timeslot_name = '4pm - 7pm', timeslot_label = '4pm')
+    timeslot_7pm = TimeSlot(timeslot_name = ' 7pm - 10pm', timeslot_label = '7pm')
+    timeslot_10pm = TimeSlot(timeslot_name = '10pm - 12am', timeslot_label = '10pm')
+
+    db.session.add_all([programming_language_py, programming_language_js,
+                        programming_language_ja, prog_language_c_plus_plus,
+                        prog_language_c, timeslot_7am, timeslot_10am,
+                        timeslot_1pm,timeslot_4pm, timeslot_7pm, timeslot_10pm])
     db.session.commit()
+
+
+
 
 if __name__ == "__main__":
     from server import app

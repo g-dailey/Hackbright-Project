@@ -8,8 +8,19 @@ from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, User
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
+from flask_bcrypt import Bcrypt
+import requests
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+mail = Mail(app)
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'gulafroz.test@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Password'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 connect_to_db(app)
 
 app.secret_key = "DEV"
@@ -26,10 +37,12 @@ def register():
 
   if form.validate_on_submit():
     print('***** This is working')
+    bcrypt = Bcrypt(app)
+    hashed_password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
 
     flash(f'Account Created for {form.first_name.data}! You can now login!', 'success') #this success message is not showing
     user = User(email=form.email.data,
-                password=form.password.data,
+                password=hashed_password,
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
                 primary_language=form.primary_language.data,
@@ -38,20 +51,6 @@ def register():
               )
 
     db.session.add(user)
-    db.session.commit()
-
-    timeslot = TimeSlot(
-                day_of_the_week=form.day_of_week.data,
-                timeslot_name=form.timeslots.data)
-    db.session.add(timeslot)
-    db.session.commit()
-
-
-    timeslotmapping = UserTimeSlotMapping(
-      user_id = user.user_id,
-      timeslot_id = timeslot.timeslot_id)
-
-    db.session.add(timeslotmapping)
     db.session.commit()
 
     # programming_lang = ProgrammingLanguage(
@@ -64,6 +63,15 @@ def register():
         user_id = user.user_id,
         programming_language_id = db_language.programming_language_id)
       db.session.add(prog_lang_mapping)
+    db.session.commit()
+
+    for times in form.timeslot_label.data:
+
+      db_timeslots = TimeSlot.query.filter(TimeSlot.timeslot_label == times).first()
+      time_slot_mapping = UserTimeSlotMapping(
+        user_id = user.user_id,
+        timeslot_id = db_timeslots.timeslot_id)
+      db.session.add(time_slot_mapping)
     db.session.commit()
 
     return redirect(url_for('login'))
@@ -114,6 +122,7 @@ def get_users():
 
 @app.route("/thank-you", methods=['GET', 'POST'])
 def thankyou():
+
 
   return render_template("thank-you.html")
 
