@@ -4,6 +4,12 @@ from sqlalchemy.orm import relationship, Session
 from flask_bcrypt import Bcrypt
 import pandas as pd
 import csv
+
+from flask_login import LoginManager
+
+
+
+
 # from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 db = SQLAlchemy()
@@ -138,6 +144,11 @@ def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     bcrypt = Bcrypt(flask_app)
     db.app = flask_app
 
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(int(user_id))
+
     db.init_app(flask_app)
 
 
@@ -179,8 +190,11 @@ def populate_user_tb():
             user_id = User.query.filter_by(email=email_data).first().user_id
             get_timeslot_id = TimeSlot.query.filter_by(timeslot_name = selected_timeslots_data).one().timeslot_id
             populate_timeslot = UserTimeSlotMapping(user_id=user_id, timeslot_id=get_timeslot_id)
+            get_prog_language_id = ProgrammingLanguage.query.filter_by(programming_language_name = prog_name_data).one().programming_language_id
+            populate_prog_language = UserProgrammingLanguageMapping(user_id=user_id, programming_language_id=get_prog_language_id)
 
-            db.session.add(populate_timeslot)
+
+            db.session.add_all([populate_timeslot,populate_prog_language])
             db.session.commit()
 
 

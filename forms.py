@@ -16,7 +16,7 @@ class SignUpForm(FlaskForm):
   primary_language = SelectField('Primary Language',choices=[('eng', 'English'), ('sp', 'Spanish'), ('fr', 'French'), ('fa', 'Farsi'), ('ge', 'German')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
   programming_language_label = SelectMultipleField('Programming Language', choices=[('C++', 'C++'), ('py', 'Python'), ('js', 'JavaScript'), ('ja', 'Java'), ('C', 'C')]) #how to make this a multiple select field and still exist in this form?
   timezone_name = SelectField('Timezone', choices=[('1', 'Pacific Time Zone'), ('2', 'Central Time Zone'), ('3', 'Eastern Time Zone'), ('4', 'Alaska Time Zone')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
-  day_of_week = SelectMultipleField('Day of the Week', choices=[('1', 'Sunday'), ('2', 'Monday'), ('3', 'Tuesday'), ('4', 'Wednesday'), ('5', 'Thursday'), ('6', 'Friday'), ('7', 'Saturday')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
+  # day_of_week = SelectMultipleField('Day of the Week', choices=[('1', 'Sunday'), ('2', 'Monday'), ('3', 'Tuesday'), ('4', 'Wednesday'), ('5', 'Thursday'), ('6', 'Friday'), ('7', 'Saturday')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
   timeslot_label = SelectMultipleField('Time Slots', choices=[('7am', '7am - 10am'), ('10am', '10am - 1pm'), ('1pm', '1pm - 4pm'), ('4pm', '4pm - 7pm'), ('7pm', '7pm - 10pm'), ('10pm', '10pm - 12am')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
   submit = SubmitField('Sign Up')
 

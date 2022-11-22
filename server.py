@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, render_template, redirect, flash, session, request, url_for
+from flask import Flask, jsonify, render_template, redirect, flash, session, request, url_for, g
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
@@ -11,9 +11,21 @@ import json
 from flask_bcrypt import Bcrypt
 import requests
 from flask_mail import Mail, Message
+import os
+
+
+
 
 app = Flask(__name__)
 mail = Mail(app)
+
+
+bcrypt = Bcrypt(app)
+
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(int(user_id))
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -27,7 +39,8 @@ app.secret_key = "DEV"
 @app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def home():
-  return render_template("homepage.html")
+  user_email=session.get('email', None)
+  return render_template("homepage.html", user_email=user_email)
 
 
 
@@ -37,12 +50,13 @@ def register():
 
   if form.validate_on_submit():
     print('***** This is working')
-    bcrypt = Bcrypt(app)
-    hashed_password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
+    # bcrypt = Bcrypt(app)
+    # hashed_password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
 
     flash(f'Account Created for {form.first_name.data}! You can now login!', 'success') #this success message is not showing
+
     user = User(email=form.email.data,
-                password=hashed_password,
+                password=form.password.data,
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
                 primary_language=form.primary_language.data,
@@ -53,10 +67,6 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    # programming_lang = ProgrammingLanguage(
-    #             programming_language_name=form.programming_language.data)
-    # db.session.add(programming_lang)
-    # db.session.commit()
     for language in form.programming_language_label.data:
       db_language = ProgrammingLanguage.query.filter(ProgrammingLanguage.programming_language_label == language).first()
       prog_lang_mapping = UserProgrammingLanguageMapping(
@@ -74,31 +84,37 @@ def register():
       db.session.add(time_slot_mapping)
     db.session.commit()
 
+
     return redirect(url_for('login'))
+  else:
+    print(form.errors)
   return render_template("register.html", form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-
   form = LoginForm()
   if form.validate_on_submit():
     user = User.query.filter_by(email=form.email.data).first()
     if user:
       password = User.query.filter_by(password=form.password.data).first()
 
-      return redirect(url_for('home'))
+      if user and password:
+        session['email'] = form.email.data
+        user_email = session['email']
+
+        print(session)
+        print('#################################')
+        return redirect(url_for('home'))
     else:
       flash('Login Failed, please check email and password and try again!', 'danger')
 
   return render_template('login.html', form=form)
 
-# route for pairing info:
-# pair the user based on info selected.
+
 
 @app.route('/home/users')
 def get_users():
-  # test = request("https://leetcode.com/problems/random-one-question/all")
   users = User.query.all()
   for user in users:
     pass
@@ -106,23 +122,27 @@ def get_users():
   return render_template('user_list.html', users=users)
 
 
-    # users = User.query.all()
-    # return jsonify({user.email: [user.first_name, user.last_name, user.timezone_name,
-    #                 user.primary_language, user.prompt_difficulty_level] for user in users})
 
-  #for user in users:
-  #   print(user.ProgrammingLanguage[relationshipname].programming_language)
-  # return render_template()
+@app.route('/home/pairedlist/<email>')
+def paired_list():
 
-# @app.route('/home/users/<email>')
-# def get_melon(email):
+  user_email=session.get('email', None)
+  users = User.query.filter_by(email=user_email).first()
 
-#     users = User.query.get(email)
-#     return jsonify(users.to_dict())
+  for user in users:
+    pass
+  return render_template('user_pairedlist.html', users=users)
+
+
+@app.route('/logout')
+def logout():
+  clearning_session = session.clear()
+
+  return render_template('homepage.html', clearning_session=clearning_session)
+
 
 @app.route("/thank-you", methods=['GET', 'POST'])
 def thankyou():
-
 
   return render_template("thank-you.html")
 
