@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, connect_to_db, db
+from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, connect_to_db, db
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
@@ -12,35 +12,30 @@ from flask_bcrypt import Bcrypt
 import requests
 from flask_mail import Mail, Message
 import os
-
+# import smtplib
 
 
 
 app = Flask(__name__)
 mail = Mail(app)
-
-
 bcrypt = Bcrypt(app)
 
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))
-
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'gulafroz.test@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Password'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
 connect_to_db(app)
 
 app.secret_key = "DEV"
+
+
+
 @app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def home():
+  all_users = User.query.all()
   user_email=session.get('email', None)
-  return render_template("homepage.html", user_email=user_email)
+
+  for user in all_users:
+    logged_in_user = User.query.filter_by(email= user_email).first()
+
+  return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user )
 
 
 
@@ -115,23 +110,26 @@ def login():
 
 @app.route('/home/users')
 def get_users():
-  users = User.query.all()
-  for user in users:
-    pass
-    # print(user.programming_languages)
-  return render_template('user_list.html', users=users)
+
+  all_users = User.query.all()
+  all_prompts = Prompt.query.all()
+  user_email = session['email']
+
+  return render_template('user_list.html',all_users=all_users, all_prompts=all_prompts )
 
 
 
-@app.route('/home/pairedlist/<email>')
+@app.route('/home/pairedlist')
 def paired_list():
 
+  all_users = User.query.all()
+  all_prompts = Prompt.query.all()
   user_email=session.get('email', None)
-  users = User.query.filter_by(email=user_email).first()
 
-  for user in users:
-    pass
-  return render_template('user_pairedlist.html', users=users)
+  for user in all_users:
+    logged_in_user = User.query.filter_by(email= user_email).first()
+
+  return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,all_prompts=all_prompts, all_users=all_users)
 
 
 @app.route('/logout')

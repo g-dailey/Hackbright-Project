@@ -1,8 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<br>
+<br>
 
-<h1> This is the user's pairedlist page!</h1>
+<div>{% if user_email %}
+  <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
 
+  {% else %}
+  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
+  {% endif %}
+</div>
+
+
+<p>To get paired with a programmer, please contant the following programmers
+who have chosen the same programming language, timezone, timeslots, and primary language.</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Programming Languages</th>
+      <th scope="col">Timings</th>
+      <th scope="col">Something Else</th>
+    </tr>
+  </thead>
+
+  {% for user in all_users %}
+  <TR>
+     <TD class="c2">{{user.first_name}}</TD>
+     <TD class="c3">{{user.last_name}}</TD>
+     <TD class="c4">{{user.email}}</TD>
+
+     <TD class="c5">
+     {% for lang in user.programming_languages %}
+        {{ lang.programming_language_name }},  &nbsp;
+     {% endfor %}
+    </TD>
+
+     <TD class="c6">
+     {% for timings in user.selected_timeslots %}
+        {{ timings.timeslot_name }}, &nbsp;
+     {% endfor %}
+    </TD>
+
+  {% endfor %}
+  <TD class="c6"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
+</TR>
+  </table>
 
 {% endblock content %}

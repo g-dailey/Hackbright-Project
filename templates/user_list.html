@@ -10,17 +10,19 @@ who have chosen the same programming language, timezone, timeslots, and primary 
 <table class="table table-striped">
   <thead>
     <tr>
-
       <th scope="col">First Name</th>
       <th scope="col">Last Name</th>
       <th scope="col">Email</th>
       <th scope="col">Programming Languages</th>
       <th scope="col">Timings</th>
-      <th scope="col">Something Else</th>
+      <th scope="col">Prompt Name</th>
+      <th scope="col">Prompt Link</th>
     </tr>
   </thead>
+  {% for prompt in all_prompts %}
 
-  {% for user in users %}
+
+  {% for user in all_users %}
   <TR>
      <TD class="c2">{{user.first_name}}</TD>
      <TD class="c3">{{user.last_name}}</TD>
@@ -37,8 +39,11 @@ who have chosen the same programming language, timezone, timeslots, and primary 
         {{ timings.timeslot_name }}, &nbsp;
      {% endfor %}
     </TD>
+
+    <TD class="c7">{{prompt.prompt_name}}</TD>
+    <TD class="c6"><a href="{{ prompt.prompt_link }}">Prompt Link </a></TD>
+    {% endfor %}
   {% endfor %}
-  <TD class="c6"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
 </TR>
   </table>
 

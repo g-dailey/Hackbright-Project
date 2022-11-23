@@ -5,15 +5,14 @@
 
 <div class="container">
   <br>
-  <h1>Welcome to the Coder Lounge!</h1>
+
 
   <div>{% if user_email %}
-    <h1 class="content-section" >Welcome {{ user_email }}</h1>
+    <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
     {% else %}
-    <h1 class="content-section">Welcome Ballonicorn</h1>
+    <h1 class="content-section">Welcome to the Coder Lounge!</h1>
     {% endif %}
   </div>
-
   <br>
   <img src="/static/coder.png" alt="" width="500" height="400">
   <br>
