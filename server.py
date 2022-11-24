@@ -126,10 +126,32 @@ def paired_list():
   all_prompts = Prompt.query.all()
   user_email=session.get('email', None)
 
-  for user in all_users:
-    logged_in_user = User.query.filter_by(email= user_email).first()
 
-  return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,all_prompts=all_prompts, all_users=all_users)
+
+  logged_in_user = User.query.filter_by(email= user_email).first()
+
+  for language in logged_in_user.programming_languages:
+    logged_in_user_language = language.programming_language_name
+
+  matching_users = []
+  for user in all_users:
+    if logged_in_user_language in [l.programming_language_name for l in user.programming_languages]:
+      matching_users.append(user)
+
+
+  # for user in all_users:
+  # matching = True
+  # if logged_in_user_language not in [l.name for l in …]:
+  #   matching = False
+  # if logged_in_user_time_slot not in [t.time_slot_name for t in …]:
+  #   matching = False
+  # if logged_in_user_timezone != user.timezone:
+  #   matching = False
+
+  # if matching:
+  #   matching_users.append(user)
+
+  return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,all_prompts=all_prompts, all_users=matching_users, logged_in_user_language=logged_in_user_language)
 
 
 @app.route('/logout')

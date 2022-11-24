@@ -16,6 +16,19 @@
 <p>To get paired with a programmer, please contant the following programmers
 who have chosen the same programming language, timezone, timeslots, and primary language.</p>
 
+
+{% if logged_in_user %}
+{% for language in logged_in_user.programming_languages%}
+{{ language.programming_language_name}}
+
+
+{% else %}
+<p>Hello</p>
+{% endfor %}
+
+{% endif %}
+
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -24,11 +37,15 @@ who have chosen the same programming language, timezone, timeslots, and primary 
       <th scope="col">Email</th>
       <th scope="col">Programming Languages</th>
       <th scope="col">Timings</th>
-      <th scope="col">Something Else</th>
+      <th scope="col">Pair?</th>
+      <th scope="col">Prompts</th>
+
     </tr>
   </thead>
 
+
   {% for user in all_users %}
+
   <TR>
      <TD class="c2">{{user.first_name}}</TD>
      <TD class="c3">{{user.last_name}}</TD>
@@ -36,7 +53,7 @@ who have chosen the same programming language, timezone, timeslots, and primary 
 
      <TD class="c5">
      {% for lang in user.programming_languages %}
-        {{ lang.programming_language_name }},  &nbsp;
+     {{ lang.programming_language_name }}, &nbsp;
      {% endfor %}
     </TD>
 
@@ -46,9 +63,21 @@ who have chosen the same programming language, timezone, timeslots, and primary 
      {% endfor %}
     </TD>
 
-  {% endfor %}
+    <TD class="c7">
+      {% for lang in user.programming_languages %}
+      {% if logged_in_user_language == lang.programming_language_name %}
+         Send Request
+         {% else %}
+         DO NOT Send Request
+         {% endif %}
+      {% endfor %}
+     </TD>
+
+
   <TD class="c6"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
 </TR>
+
+{% endfor %}
   </table>
 
 {% endblock content %}
