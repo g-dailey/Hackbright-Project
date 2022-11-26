@@ -16,12 +16,6 @@
 <p>To get paired with a programmer, please contant the following programmers
 who have chosen the same programming language, timezone, timeslots, and primary language.</p>
 
-
-{% if logged_in_user %}
-{% for language in logged_in_user.programming_languages%}
-{{ language.programming_language_name}}
-
-
 {% else %}
 <p>Hello</p>
 {% endfor %}

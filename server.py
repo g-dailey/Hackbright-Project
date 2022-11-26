@@ -19,9 +19,7 @@ import os
 app = Flask(__name__)
 mail = Mail(app)
 bcrypt = Bcrypt(app)
-
 connect_to_db(app)
-
 app.secret_key = "DEV"
 
 
@@ -78,8 +76,6 @@ def register():
         timeslot_id = db_timeslots.timeslot_id)
       db.session.add(time_slot_mapping)
     db.session.commit()
-
-
     return redirect(url_for('login'))
   else:
     print(form.errors)
@@ -97,9 +93,6 @@ def login():
       if user and password:
         session['email'] = form.email.data
         user_email = session['email']
-
-        print(session)
-        print('#################################')
         return redirect(url_for('home'))
     else:
       flash('Login Failed, please check email and password and try again!', 'danger')
@@ -126,30 +119,28 @@ def paired_list():
   all_prompts = Prompt.query.all()
   user_email=session.get('email', None)
 
-
-
   logged_in_user = User.query.filter_by(email= user_email).first()
 
   for language in logged_in_user.programming_languages:
     logged_in_user_language = language.programming_language_name
+  for timeslot in logged_in_user.selected_timeslots:
+    logged_in_user_timeslot = timeslot.timeslot_name
+  # for timezone in logged_in_user.timezone_name:
+  #   logged_in_user_timezone = timezone.timezones
 
   matching_users = []
   for user in all_users:
-    if logged_in_user_language in [l.programming_language_name for l in user.programming_languages]:
+    # if logged_in_user_language in [l.programming_language_name for l in user.programming_languages]:
+    #   matching_users.append(user)
+    matching = True
+    if logged_in_user_language not in [l.programming_language_name for l in user.programming_languages]:
+      matching = False
+    elif logged_in_user_timeslot not in [l.timeslot_name for l in user.selected_timeslots]:
+      matching = False
+    # elif logged_in_user_timezone != user.timezone:
+    #   matching = False
+    if matching:
       matching_users.append(user)
-
-
-  # for user in all_users:
-  # matching = True
-  # if logged_in_user_language not in [l.name for l in …]:
-  #   matching = False
-  # if logged_in_user_time_slot not in [t.time_slot_name for t in …]:
-  #   matching = False
-  # if logged_in_user_timezone != user.timezone:
-  #   matching = False
-
-  # if matching:
-  #   matching_users.append(user)
 
   return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,all_prompts=all_prompts, all_users=matching_users, logged_in_user_language=logged_in_user_language)
 
