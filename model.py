@@ -32,6 +32,7 @@ class User(db.Model):
     timezone_name = db.Column(db.String)
     programming_languages = relationship('ProgrammingLanguage', secondary='users_programming_language_mapping', back_populates='users')
     selected_timeslots = relationship('TimeSlot', secondary='users_timeslot_mapping', back_populates='users_timeslots')
+    prompts_assigned = relationship('Prompt', back_populates='user_prompts')
     #User.query.get(7).__dict__
     #_[0].__dict__
 
@@ -53,6 +54,7 @@ class ProgrammingLanguage(db.Model):
     programming_language_name = db.Column(db.String)
     programming_language_label = db.Column(db.String)
     users = relationship('User', secondary='users_programming_language_mapping', back_populates='programming_languages')
+
 
     def __repr__(self):
         return f'<Programming Language programming_language_id={self.programming_language_id} programming_language_name={self.programming_language_name}>'
@@ -133,6 +135,8 @@ class Prompt(db.Model):
     prompt_name = db.Column(db.String)
     prompt_link = db.Column(db.String)
     prompt_difficulty = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    user_prompts = relationship('User', back_populates='prompts_assigned')
 
     def __repr__(self):
             return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link} prompt_difficulty={self.prompt_difficulty}>"

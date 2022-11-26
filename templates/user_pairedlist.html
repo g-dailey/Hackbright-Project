@@ -36,6 +36,7 @@ who have chosen the same programming language, timezone, timeslots, and primary 
   {% for user in all_users %}
 
   <TR>
+
      <TD class="c2">{{user.first_name}}</TD>
      <TD class="c3">{{user.last_name}}</TD>
      <TD class="c4">{{user.email}}</TD>
@@ -54,7 +55,7 @@ who have chosen the same programming language, timezone, timeslots, and primary 
 
     <TD class="c7">
       {% for lang in user.programming_languages %}
-      {% if logged_in_user_language == lang.programming_language_name %}
+      {% if logged_in_user_language in lang.programming_language_name %}
          Send Request
          {% else %}
          DO NOT Send Request
@@ -62,16 +63,13 @@ who have chosen the same programming language, timezone, timeslots, and primary 
       {% endfor %}
      </TD>
 
-  <TD class="c6">
-
-
-    <a href="{{ random_prompt_link }}">{{ random_prompt_name }} </a>
-
-
-  </TD>
+     {% for prompt in user.all_prompts %}
+     <TD class="c2">{{prompt.prompt_name}}</TD>
 </TR>
 
 {% endfor %}
+{% endfor %}
+
   </table>
 
 {% endblock content %}
