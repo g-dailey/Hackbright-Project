@@ -1,18 +1,12 @@
 import pandas as pd
 import csv
 
-filename = 'Leetcode-data - leetcode (1).csv'
+user_filename = 'User-data.csv'
 
-with open(filename, 'r') as csvfile:
+with open(user_filename, 'r') as csvfile:
     datareader = csv.reader(csvfile)
     for row in datareader:
-      split_data = row[0].split("--")
-      prompt_name, prompt_link, prompt_difficulty = split_data
-      print(prompt_name)
+        split_data = row[0].split("--")
 
-        # print(row)
-
-
-# leetcode_prompt = pd.read_csv('Leetcode-data - leetcode.csv')
-# leetcode_data = pd.DataFrame(leetcode_prompt)
-# print(type(leetcode_data))
+        first_name_data, last_name_data, email_data, pwd_data, prompt_diff_data, primary_lang_data, timezone_data, prog_name_data, selected_timeslots_data = split_data
+        print(timezone_data)

@@ -16,11 +16,6 @@
 <p>To get paired with a programmer, please contant the following programmers
 who have chosen the same programming language, timezone, timeslots, and primary language.</p>
 
-{% else %}
-<p>Hello</p>
-{% endfor %}
-
-{% endif %}
 
 
 <table class="table table-striped">
@@ -67,8 +62,13 @@ who have chosen the same programming language, timezone, timeslots, and primary 
       {% endfor %}
      </TD>
 
+  <TD class="c6">
 
-  <TD class="c6"><a href="https://leetcode.com/problems/insert-interval/">Leetcode Problem 57 </a></TD>
+
+    <a href="{{ random_prompt_link }}">{{ random_prompt_name }} </a>
+
+
+  </TD>
 </TR>
 
 {% endfor %}

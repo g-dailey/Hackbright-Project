@@ -180,9 +180,6 @@ def populate_user_tb():
 
             first_name_data, last_name_data, email_data, pwd_data, prompt_diff_data, primary_lang_data, timezone_data, prog_name_data, selected_timeslots_data = split_data
 
-
-
-            # breakpoint()
             populate_user = User(first_name = first_name_data, last_name = last_name_data, email = email_data, password = pwd_data, prompt_difficulty_level=prompt_diff_data,primary_language=primary_lang_data, timezone_name= timezone_data )
 
             db.session.add(populate_user)

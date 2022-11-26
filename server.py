@@ -12,6 +12,7 @@ from flask_bcrypt import Bcrypt
 import requests
 from flask_mail import Mail, Message
 import os
+from random import choice
 # import smtplib
 
 
@@ -117,6 +118,10 @@ def paired_list():
 
   all_users = User.query.all()
   all_prompts = Prompt.query.all()
+
+  for prompt in all_prompts:
+    random_prompt_link, random_prompt_name = prompt.prompt_link, prompt.prompt_name
+
   user_email=session.get('email', None)
 
   logged_in_user = User.query.filter_by(email= user_email).first()
@@ -125,13 +130,15 @@ def paired_list():
     logged_in_user_language = language.programming_language_name
   for timeslot in logged_in_user.selected_timeslots:
     logged_in_user_timeslot = timeslot.timeslot_name
+  for prompt in all_prompts:
+    selected_prompts_name = prompt.prompt_name
+    selected_prompt_link = prompt.prompt_link
+    # selected_prompt_diff_level = prompt.prompt_difficulty
   # for timezone in logged_in_user.timezone_name:
   #   logged_in_user_timezone = timezone.timezones
 
   matching_users = []
   for user in all_users:
-    # if logged_in_user_language in [l.programming_language_name for l in user.programming_languages]:
-    #   matching_users.append(user)
     matching = True
     if logged_in_user_language not in [l.programming_language_name for l in user.programming_languages]:
       matching = False
@@ -142,7 +149,9 @@ def paired_list():
     if matching:
       matching_users.append(user)
 
-  return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,all_prompts=all_prompts, all_users=matching_users, logged_in_user_language=logged_in_user_language)
+  return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,
+                        all_users=matching_users, logged_in_user_language=logged_in_user_language,
+                        all_prompts=all_prompts, random_prompt_link=random_prompt_link, random_prompt_name=random_prompt_name)
 
 
 @app.route('/logout')
