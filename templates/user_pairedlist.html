@@ -58,7 +58,7 @@ who have chosen the same programming language, timezone, timeslots, and primary 
      </TD>
 
 
-     <TD class="c2">{{ (all_prompts | random).prompt_name }}</TD>
+     <TD class="c2"><a href="{{ (all_prompts | random).prompt_link }}">{{ (all_prompts | random).prompt_name }}</a></TD>
 
 
 </TR>

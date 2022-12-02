@@ -11,6 +11,7 @@ import json
 from flask_bcrypt import Bcrypt
 import requests
 from flask_mail import Mail, Message
+from flask_login import login_user, current_user, logout_user
 import os
 from random import choice
 # import smtplib
@@ -34,12 +35,16 @@ def home():
   for user in all_users:
     logged_in_user = User.query.filter_by(email= user_email).first()
 
+
   return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user )
 
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+
+  # if current_user.is_authenticated:
+  #   return redirect(url_for('home'))
   form = SignUpForm(request.form)
 
   if form.validate_on_submit():
@@ -85,11 +90,15 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
+  # if current_user.is_authenticated:
+  #   return redirect(url_for('home'))
   form = LoginForm()
   if form.validate_on_submit():
     user = User.query.filter_by(email=form.email.data).first()
     if user:
       password = User.query.filter_by(password=form.password.data).first()
+
 
       if user and password:
         session['email'] = form.email.data
@@ -157,6 +166,8 @@ def paired_list():
 
 @app.route('/logout')
 def logout():
+  logout_user()
+
   clearning_session = session.clear()
 
   return render_template('homepage.html', clearning_session=clearning_session)

@@ -102,6 +102,10 @@ class UserTimeSlotMapping(db.Model):
         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
 
 
+#Notification Table
+#sender
+#recipient
+
 # class Pairing(db.Model):
 #     """Pairing"""
 
@@ -112,8 +116,6 @@ class UserTimeSlotMapping(db.Model):
 #     user_two_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 #     # meeting_date = db.Column(db.Datetime, nullable=False) #is there a datetime option?
 #     feedback_description = db.Column(db.Text)
-#     sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-#     recipient_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 #     is_prompt_solved = db.Column(db.Boolean)
 #     prompt_id = db.Column(db.Integer, db.ForeignKey("prompts.prompt_id"))
 
@@ -149,10 +151,6 @@ def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     db.app = flask_app
 
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))
-
     db.init_app(flask_app)
 
 
@@ -173,6 +171,12 @@ def populate_prompt_tb():
             db.session.commit()
 
 user_filename = 'User-data.csv'
+
+# Notifications Tables (ID, recipient, sender, message)
+# Handing request (if request accepted, already paired)
+# Table for rejected requests (to dismiss or have it display differently)
+# User profile: User being able to check other user’s
+
 
 
 def populate_user_tb():
