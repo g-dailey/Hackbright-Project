@@ -88,41 +88,8 @@ def register():
   return render_template("register.html", form=form)
 
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
 
-  # if current_user.is_authenticated:
-  #   return redirect(url_for('home'))
-  form = LoginForm()
-  if form.validate_on_submit():
-    user = User.query.filter_by(email=form.email.data).first()
-    if user:
-      password = User.query.filter_by(password=form.password.data).first()
-
-
-      if user and password:
-        session['email'] = form.email.data
-        user_email = session['email']
-        return redirect(url_for('home'))
-    else:
-      flash('Login Failed, please check email and password and try again!', 'danger')
-
-  return render_template('login.html', form=form)
-
-
-
-@app.route('/home/users')
-def get_users():
-
-  all_users = User.query.all()
-  all_prompts = Prompt.query.all()
-  user_email = session['email']
-
-  return render_template('user_list.html',all_users=all_users, all_prompts=all_prompts )
-
-
-
-@app.route('/home/pairedlist')
+@app.route('/pairedlist')
 def paired_list():
 
   all_users = User.query.all()
@@ -162,6 +129,42 @@ def paired_list():
   return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,
                         all_users=matching_users, logged_in_user_languages=logged_in_user_languages,
                         all_prompts=all_prompts, random_prompt_link=random_prompt_link, random_prompt_name=random_prompt_name)
+
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+
+  # if current_user.is_authenticated:
+  #   return redirect(url_for('home'))
+  form = LoginForm()
+  if form.validate_on_submit():
+    user = User.query.filter_by(email=form.email.data).first()
+    if user:
+      password = User.query.filter_by(password=form.password.data).first()
+
+
+      if user and password:
+        session['email'] = form.email.data
+        user_email = session['email']
+        return redirect(url_for('paired_list'))
+    else:
+      flash('Login Failed, please check email and password and try again!', 'danger')
+
+  return render_template('login.html', form=form)
+
+
+
+@app.route('/home/users')
+def get_users():
+
+  all_users = User.query.all()
+  all_prompts = Prompt.query.all()
+  user_email = session['email']
+
+  return render_template('user_list.html',all_users=all_users, all_prompts=all_prompts )
+
+
 
 
 @app.route('/logout')
