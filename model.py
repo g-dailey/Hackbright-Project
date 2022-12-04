@@ -102,9 +102,18 @@ class UserTimeSlotMapping(db.Model):
         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
 
 
-#Notification Table
-#sender
-#recipient
+class PairingRequests(db.Model):
+    __tablename__ = "pairing_requests"
+
+    pairing_list_id = db.Column(db.Integer,
+                                autoincrement=True,
+                                primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    receiever_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+
+    def __repr__(self):
+        return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
+
 
 # class Pairing(db.Model):
 #     """Pairing"""
@@ -121,12 +130,6 @@ class UserTimeSlotMapping(db.Model):
 
 #     def __repr__(self):
 #             return f"<Pairing pairing_id={self.pairing_id} >" #am I am able to print the foreign key values here?
-
-######
-# Prompts Table
-# figure out the query to get data from LeetCode API
-# urllib to make requests
-# once the response is received, use another library to turn json response to object.
 
 class Prompt(db.Model):
     """Prompt"""

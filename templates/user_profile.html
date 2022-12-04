@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>{% if user_email %}
+  <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
+
+  {% else %}
+  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
+  {% endif %}
+</div>
+
+
+<div class ="content-section">
+  <div class="media">
+    <img class="rounded-circle account-img" src="/Users/gedailey/src/hackbright-project/static/default-image.jpeg">
+    <div class="media-body">
+      <h2 class="account-heading">{{ logged_in_user.first_name }}</h2>
+      <h3 class="text-secondary">{{ logged_in_user.email }}</h3>
+      <h3 class="text-secondary">{{logged_in_user.primary_language}}</h3>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

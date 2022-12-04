@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, connect_to_db, db
+from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, PairingRequests, connect_to_db, db
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
@@ -135,8 +135,7 @@ def paired_list():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 
-  # if current_user.is_authenticated:
-  #   return redirect(url_for('home'))
+
   form = LoginForm()
   if form.validate_on_submit():
     user = User.query.filter_by(email=form.email.data).first()
@@ -152,6 +151,49 @@ def login():
       flash('Login Failed, please check email and password and try again!', 'danger')
 
   return render_template('login.html', form=form)
+
+
+@app.route("/userprofile", methods=['GET', 'POST'])
+def user_profile():
+
+  logged_in_user_email=session.get('email', None)
+
+  return render_template('user_profile.html', logged_in_user_email=logged_in_user_email)
+
+
+
+@app.route("/pair_request", methods=['GET', 'POST'])
+def pair_request():
+
+
+  logged_in_user_email=session.get('email', None)
+
+  if request.method == 'POST':
+    pairing_request_email = request.form.get("user_email")
+    print("#####################")
+    print(pairing_request_email)
+    print("#####################")
+    session['user.email'] = pairing_request_email
+    sender_user = User.query.filter_by(email=pairing_request_email).first()
+    print(sender_user.user_id)
+    print("#####################")
+    receiver_user = User.query.filter_by(email=logged_in_user_email).first()
+    pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
+            receiever_id=receiver_user.user_id)
+
+    db.session.add(pairing_request_db)
+    db.session.commit()
+
+    return redirect('/home')
+  else:
+    return render_template('base.html', pairing_request_email=pairing_request_email)
+
+
+  #   return redirect('home')
+
+  # else:
+  #   return render_template('user_pairedlist.html')
+
 
 
 
