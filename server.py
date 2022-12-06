@@ -170,14 +170,9 @@ def pair_request():
 
   if request.method == 'POST':
     pairing_request_email = request.form.get("user_email")
-    print("#####################")
-    print(pairing_request_email)
-    print("#####################")
     session['user.email'] = pairing_request_email
-    sender_user = User.query.filter_by(email=pairing_request_email).first()
-    print(sender_user.user_id)
-    print("#####################")
-    receiver_user = User.query.filter_by(email=logged_in_user_email).first()
+    sender_user = User.query.filter_by(email=logged_in_user_email).first()
+    receiver_user = User.query.filter_by(email=pairing_request_email).first()
     pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
             receiever_id=receiver_user.user_id)
 
