@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class ="user-profile">
 
-<div>{% if user_email %}
   <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
 
-  {% else %}
-  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
-  {% endif %}
-</div>
 
 
 <div class ="content-section">
   <div class="media">
-    <img class="rounded-circle account-img" src="/Users/gedailey/src/hackbright-project/static/default-image.jpeg">
+    <img class="rounded-circle account-img" src="static/default-image.jpeg">
     <div class="media-body">
-      <h2 class="account-heading">{{ logged_in_user.first_name }}</h2>
+      <h2 class="account-heading">{{ logged_in_user.first_name }} {{logged_in_user.last_name }}</h2>
       <h3 class="text-secondary">{{ logged_in_user.email }}</h3>
-      <h3 class="text-secondary">{{logged_in_user.primary_language}}</h3>
+      {% for lang in logged_in_user.programming_languages %}
+      <h3 class ="text-secondary">{{ lang.programming_language_name }} </h3>
+      {% endfor %}
+
+      <h3 class="text-secondary">{{logged_in_user.primary_language_name}}</h3>
     </div>
   </div>
 </div>
 
+<a href="\pairedlist">Checkout the list of Programmers with pair with and tackle Leetcode Problems!</a>
+</div>
 {% endblock content %}

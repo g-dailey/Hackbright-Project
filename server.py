@@ -10,7 +10,7 @@ from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
 from flask_bcrypt import Bcrypt
 import requests
-from flask_mail import Mail, Message
+
 from flask_login import login_user, current_user, logout_user
 import os
 from random import choice
@@ -19,7 +19,7 @@ from random import choice
 
 
 app = Flask(__name__)
-mail = Mail(app)
+
 bcrypt = Bcrypt(app)
 connect_to_db(app)
 app.secret_key = "DEV"
@@ -146,20 +146,11 @@ def login():
       if user and password:
         session['email'] = form.email.data
         user_email = session['email']
-        return redirect(url_for('paired_list'))
+        return redirect(url_for('profile'))
     else:
       flash('Login Failed, please check email and password and try again!', 'danger')
 
   return render_template('login.html', form=form)
-
-
-@app.route("/userprofile", methods=['GET', 'POST'])
-def user_profile():
-
-  logged_in_user_email=session.get('email', None)
-
-  return render_template('user_profile.html', logged_in_user_email=logged_in_user_email)
-
 
 
 @app.route("/pair_request", methods=['GET', 'POST'])
@@ -170,8 +161,9 @@ def pair_request():
 
   if request.method == 'POST':
     pairing_request_email = request.form.get("user_email")
-    session['user.email'] = pairing_request_email
+    session['user_email'] = pairing_request_email
     sender_user = User.query.filter_by(email=logged_in_user_email).first()
+    sender_user_id = sender_user.user_id
     receiver_user = User.query.filter_by(email=pairing_request_email).first()
     pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
             receiever_id=receiver_user.user_id)
@@ -179,15 +171,32 @@ def pair_request():
     db.session.add(pairing_request_db)
     db.session.commit()
 
-    return redirect('/home')
+    paired_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
+    for paired_request_user in paired_request_data:
+      paired_user_name = User.query.filter_by(user_id=paired_request_user.sender_id).first()
+    print(paired_request_data)
+    print('##################')
+
+
+  # Once you have that working, the next thing would be to change the HTML so that if the user
+  # has already sent a request to a matched user, we show something like "Request sent" instead of the form
+  # that allows them to send a new request. To do that, you could make a set of user IDs that the user has already
+  # sent requests to, and pass that in to the Jinja template so the template can generate different HTML depending on
+  # whether or not the user has already sent a request to the matched user.
+
+    return render_template('user_pairedlist.html', paired_request_data=paired_request_data, pairing_request_email=pairing_request_email)
   else:
     return render_template('base.html', pairing_request_email=pairing_request_email)
 
+@app.route("/profile", methods=['GET', 'POST'])
+def user_profile():
 
-  #   return redirect('home')
+  user_email=session.get('email', None)
 
-  # else:
-  #   return render_template('user_pairedlist.html')
+  logged_in_user = User.query.filter_by(email= user_email).first()
+
+
+  return render_template('user_profile.html', logged_in_user=logged_in_user)
 
 
 

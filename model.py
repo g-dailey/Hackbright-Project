@@ -148,7 +148,7 @@ class Prompt(db.Model):
 
 def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
-    flask_app.config["SQLALCHEMY_ECHO"] = echo
+    flask_app.config["SQLALCHEMY_ECHO"] = False
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     bcrypt = Bcrypt(flask_app)
     db.app = flask_app

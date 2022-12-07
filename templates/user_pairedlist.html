@@ -3,9 +3,35 @@
 {% block content %}
 <br>
 <br>
+    <table  class="table table-striped" >
+      <thead>
+        <tr>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Pairing Status</th>
+        </tr>
+      </thead>
 
-<div>{% if user_email %}
-  <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
+    {% for variable in paired_request_data %}
+
+    <TR>
+       <TD class="c2"> {{variable.sender_id}} </TD>
+       <TD class="c3"> {{variable.receiver_id}} </TD>
+       <TD class="c4" > Test </TD>
+      <TD> Request Submitted </TD>
+  </TR>
+
+  {% endfor %}
+  </table>
+
+  <div>{% if user_email %}
+    <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
+
+
+    <p>To get paired with a programmer, please contant the following programmers
+      who have chosen the same programming language, timezone, timeslots, and primary language.</p>
+
 
   {% else %}
   <h1 class="content-section">Welcome to the Coder Lounge!</h1>
@@ -17,10 +43,6 @@
 who have chosen the same programming language, timezone, timeslots, and primary language.</p>
 
 
-
-
-
-
 <table  class="table table-striped" >
   <thead>
     <tr>
@@ -29,7 +51,6 @@ who have chosen the same programming language, timezone, timeslots, and primary 
       <th scope="col">Email</th>
       <th scope="col">Programming Languages</th>
       <th scope="col">Timings</th>
-      <th scope="col">Pair?</th>
       <th scope="col">Prompts</th>
 
     </tr>
@@ -55,29 +76,19 @@ who have chosen the same programming language, timezone, timeslots, and primary 
      {% endfor %}
     </TD>
 
-    <TD id="c7">
-      <input type="text" id="user_email" name="user_email" ><br>
-
-     </TD>
-     <input value="Submit" type="submit" />
-
-
      <TD class="c2"><a href="{{ (all_prompts | random).prompt_link }}">{{ (all_prompts | random).prompt_name }}</a></TD>
-
-
 </TR>
-
 
 </body>
 </html>
 
-
-
-
-
-
-
 {% endfor %}
+<label> Please enter the email of the Programmer you would like to connect with!</label>
+<br>
+
+<input type="text" id="user_email" name="user_email" > <br>
+
+<input value="Submit" type="submit" />
 
   </table>
   <script src="/static/app.js"></script>
