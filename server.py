@@ -18,6 +18,7 @@ from random import choice
 
 
 
+
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -146,7 +147,7 @@ def login():
       if user and password:
         session['email'] = form.email.data
         user_email = session['email']
-        return redirect(url_for('profile'))
+        return redirect(url_for('user_profile'))
     else:
       flash('Login Failed, please check email and password and try again!', 'danger')
 
@@ -172,21 +173,24 @@ def pair_request():
     db.session.commit()
 
     paired_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
+    paired_req_receiver_id = []
     for paired_request_user in paired_request_data:
-      paired_user_name = User.query.filter_by(user_id=paired_request_user.sender_id).first()
-    print(paired_request_data)
+      paired_req_receiver_id.append(paired_request_user.receiever_id)
+
+
+      # paired_user_name = User.query.filter_by(user_id=paired_request_user.sender_id).first()
+
+    test_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
+
+
+    print(test_user)
     print('##################')
 
 
-  # Once you have that working, the next thing would be to change the HTML so that if the user
-  # has already sent a request to a matched user, we show something like "Request sent" instead of the form
-  # that allows them to send a new request. To do that, you could make a set of user IDs that the user has already
-  # sent requests to, and pass that in to the Jinja template so the template can generate different HTML depending on
-  # whether or not the user has already sent a request to the matched user.
 
-    return render_template('user_pairedlist.html', paired_request_data=paired_request_data, pairing_request_email=pairing_request_email)
+    return render_template('user_pairedlist.html', test_user=test_user, pairing_request_email=pairing_request_email)
   else:
-    return render_template('base.html', pairing_request_email=pairing_request_email)
+    return render_template('homepage.html', pairing_request_email=pairing_request_email)
 
 @app.route("/profile", methods=['GET', 'POST'])
 def user_profile():
