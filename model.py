@@ -110,6 +110,7 @@ class PairingRequests(db.Model):
                                 primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     receiever_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    #paired = boolean
 
     def __repr__(self):
         return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
