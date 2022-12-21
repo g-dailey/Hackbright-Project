@@ -22,6 +22,68 @@
   </div>
 </div>
 
-<a href="\pairedlist">Checkout the list of Programmers with pair with and tackle Leetcode Problems!</a>
+
+<div>{% if test_user %}
+  <h1>Thank you for sending a request!</h1>
+
+
+  <p>Here's the list of Programmers you have sent a request to be paired with.</p>
+
+
+{% else %}
+<h1 class="content-section">Welcome to the Coder Lounge!</h1>
+
+
+{% endif %}
+</div>
+
+<br>
+  <table  class="table table-striped" >
+    <thead>
+      <tr>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Pairing Status</th>
+      </tr>
+    </thead>
+
+  {% for sent_request_user in test_user %}
+
+  <TR>
+     <TD class="c2"> {{sent_request_user.first_name}} </TD>
+     <TD class="c3"> {{sent_request_user.last_name}} </TD>
+     <TD class="c4" > {{sent_request_user.email}} </TD>
+    <TD> Request Submitted </TD>
+</TR>
+
+{% endfor %}
+</table>
+
+<table  class="table table-striped" >
+  <thead>
+    <tr>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Pairing Status</th>
+    </tr>
+  </thead>
+
+{% for pairing_request_user in pending_user %}
+
+<TR>
+   <TD class="c2"> {{pairing_request_user.first_name}} </TD>
+   <TD class="c3"> {{pairing_request_user.last_name}} </TD>
+   <TD class="c4" > {{pairing_request_user.email}} </TD>
+  <TD> Request Pending </TD>
+</TR>
+
+{% endfor %}
+</table>
+
+<a href="\pairedlist">
+
+  Checkout the list of Programmers with pair with and tackle Leetcode Problems!</a>
 </div>
 {% endblock content %}

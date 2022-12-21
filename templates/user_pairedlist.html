@@ -2,6 +2,21 @@
 
 {% block content %}
 <br>
+
+  <div>{% if test_user %}
+    <h1>Thank you for sending a request!</h1>
+
+
+    <p>Here's the list of Programmers you have sent a request to be paired with.</p>
+
+
+  {% else %}
+  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
+
+
+  {% endif %}
+</div>
+
 <br>
     <table  class="table table-striped" >
       <thead>
@@ -13,35 +28,17 @@
         </tr>
       </thead>
 
-    {% for variable in paired_request_data %}
+    {% for pairing_request_user in test_user %}
 
     <TR>
-       <TD class="c2"> {{variable.sender_id}} </TD>
-       <TD class="c3"> {{variable.receiver_id}} </TD>
-       <TD class="c4" > Test </TD>
+       <TD class="c2"> {{pairing_request_user.first_name}} </TD>
+       <TD class="c3"> {{pairing_request_user.last_name}} </TD>
+       <TD class="c4" > {{pairing_request_user.email}} </TD>
       <TD> Request Submitted </TD>
   </TR>
 
   {% endfor %}
   </table>
-
-  <div>{% if user_email %}
-    <h1>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h1>
-
-
-    <p>To get paired with a programmer, please contant the following programmers
-      who have chosen the same programming language, timezone, timeslots, and primary language.</p>
-
-
-  {% else %}
-  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
-  {% endif %}
-</div>
-
-
-<p>To get paired with a programmer, please contant the following programmers
-who have chosen the same programming language, timezone, timeslots, and primary language.</p>
-
 
 <table  class="table table-striped" >
   <thead>

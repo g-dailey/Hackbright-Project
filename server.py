@@ -16,9 +16,6 @@ import os
 from random import choice
 # import smtplib
 
-
-
-
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -35,11 +32,7 @@ def home():
 
   for user in all_users:
     logged_in_user = User.query.filter_by(email= user_email).first()
-
-
   return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user )
-
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -132,17 +125,14 @@ def paired_list():
                         all_prompts=all_prompts, random_prompt_link=random_prompt_link, random_prompt_name=random_prompt_name)
 
 
-
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-
 
   form = LoginForm()
   if form.validate_on_submit():
     user = User.query.filter_by(email=form.email.data).first()
     if user:
       password = User.query.filter_by(password=form.password.data).first()
-
 
       if user and password:
         session['email'] = form.email.data
@@ -156,7 +146,6 @@ def login():
 
 @app.route("/pair_request", methods=['GET', 'POST'])
 def pair_request():
-
 
   logged_in_user_email=session.get('email', None)
 
@@ -177,16 +166,11 @@ def pair_request():
     for paired_request_user in paired_request_data:
       paired_req_receiver_id.append(paired_request_user.receiever_id)
 
-
-      # paired_user_name = User.query.filter_by(user_id=paired_request_user.sender_id).first()
-
+    #How to have this show in the profile route as well?
     test_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
-
 
     print(test_user)
     print('##################')
-
-
 
     return render_template('user_pairedlist.html', test_user=test_user, pairing_request_email=pairing_request_email)
   else:
@@ -196,13 +180,25 @@ def pair_request():
 def user_profile():
 
   user_email=session.get('email', None)
-
   logged_in_user = User.query.filter_by(email= user_email).first()
 
+  sender_user_id = logged_in_user.user_id
+  sent_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
+  sent_req_receiver_id = []
 
-  return render_template('user_profile.html', logged_in_user=logged_in_user)
+  for sent_request_user in sent_request_data:
+    sent_req_receiver_id.append(sent_request_user.receiever_id)
 
+  paired_request_data = PairingRequests.query.filter_by(receiever_id=sender_user_id).all()
+  paired_req_receiver_id = []
 
+  for paired_request_user in paired_request_data:
+    paired_req_receiver_id.append(paired_request_user.sender_id)
+
+  sent_user = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
+  pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
+  print(pending_user, " here")
+  return render_template('user_profile.html', logged_in_user=logged_in_user, test_user=sent_user, pending_user=pending_user )
 
 
 @app.route('/home/users')
@@ -213,8 +209,6 @@ def get_users():
   user_email = session['email']
 
   return render_template('user_list.html',all_users=all_users, all_prompts=all_prompts )
-
-
 
 
 @app.route('/logout')
