@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+  <div>{% if test_user %}
+    <h3>Thank you for sending a request!</h3>
+    <p>Here's the list of Programmers you have sent a request to be paired with.</p>
+  {% else %}
+  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
+  {% endif %}
+</div>
+
+<br>
+    <table  class="table table-striped" >
+      <thead>
+        <tr>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Pairing Status</th>
+        </tr>
+      </thead>
+
+    {% for pairing_request_user in test_user %}
+
+    <TR>
+       <TD class="c2"> {{pairing_request_user.first_name}} </TD>
+       <TD class="c3"> {{pairing_request_user.last_name}} </TD>
+       <TD class="c4" > {{pairing_request_user.email}} </TD>
+      <TD> Request Submitted </TD>
+  </TR>
+
+  {% endfor %}
+  </table>
+
+</body>
+</html>
+
+<h3>To send more requests to Programmers, <a href="\pairedlist">check out here!</a></h3>
+<br>
+{% endblock content %}

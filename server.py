@@ -174,7 +174,7 @@ def pair_request():
     print(test_user)
     print('##################')
 
-    return render_template('user_pairedlist.html', test_user=test_user, pairing_request_email=pairing_request_email)
+    return render_template('pair_request.html', test_user=test_user, pairing_request_email=pairing_request_email)
   else:
     return render_template('homepage.html', pairing_request_email=pairing_request_email)
 
