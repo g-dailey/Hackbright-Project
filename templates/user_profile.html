@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class ="user-profile">
 
-  <h3>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h3>
-
-
-<div class ="content-section">
-  <div id="profile-image">
-  <div class="media">
-    <img class="rounded-circle account-img" src="static/default-image.jpeg" width="200" height="200">
-  </div>
 </div>
+<div class="row">
+  <div class="col">
+
+
+    <div class ="user-profile">
+
+      <h3>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h3>
+
+
+    <div class ="content-section">
+      <div id="profile-image">
+      <div class="media">
+        <img class="rounded-circle account-img" src="static/default-image.jpeg" width="200" height="200">
+      </div>
+    </div>
+
+
+    </div>
+
+
+  </div>
+  <div class="col">
+
     <div class="media-body">
       <h3 class="account-heading">{{ logged_in_user.first_name }} {{logged_in_user.last_name }}</h3>
       <h5 class="text-secondary">{{ logged_in_user.email }}</h5>
@@ -22,44 +36,80 @@
       <h3 class="text-secondary">{{logged_in_user.primary_language_name}}</h3>
     </div>
 
-</div>
+
+  </div>
+  <div class="col">
 
 
 
-<div>{% if test_user %}
 
-  <p>Here's the list of Programmers you have sent a request to do pair programming with you!</p>
-  {% for pairing_request_user in pending_user %}
-  <div class="row">
-    <div class="column">
-      <div class="card"> {{pairing_request_user.first_name}} {{pairing_request_user.last_name}} <br>{{pairing_request_user.email}} <button id="confirm_request_btn"> Confirm Request </button> <button id="deny_request_btn"> Deny Request </button>
+    <div>{% if test_user %}
+
+      <p>Here's the list of Programmers you have sent a request to do pair programming with you!</p>
+      {% for pairing_request_user in pending_user %}
+      <div class="row">
+        <div class="column">
+          <div class="card"> {{pairing_request_user.first_name}} {{pairing_request_user.last_name}} <br>{{pairing_request_user.email}} <button type="button" onclick= "alert('Thank you for approving the request!')" id="confirm_request_btn"> Confirm Request </button> <button type="button" onclick= "alert('Denying Request Completed!')"id="deny_request_btn"> Deny Request </button>
+          </div>
+          <br>
+        </div>
       </div>
-      <br>
+      {% endfor %}
+
+
+
+      <p>Here's the list of Programmers you have sent a request to be paired with.</p>
+      <p>To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
+
+
+    {% else %}
+    <h3 class="content-section">Welcome to the Coder Lounge!</h3>
+
+
+    {% endif %}
     </div>
-  </div>
-  {% endfor %}
 
-  <p>Here's the list of Programmers you have sent a request to be paired with.</p>
-  <p>To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
+    <div>{% if paired %}
 
+      <p>Here's the list of Programmers you have sent a request to do pair programming with you!</p>
+      {% for paired_user in paired %}
+      <div class="row">
+        <div class="column">
+          <div class="card"> {{paired_user.first_name}} {{paired_user.last_name}} <br>{{paired_user.email}} <button type="button" onclick= "alert('Thank you for approving the request!')" id="confirm_request_btn"> Confirm Request </button> <button type="button" onclick= "alert('Denying Request Completed!')"id="deny_request_btn"> Deny Request </button>
+          </div>
+          <br>
+        </div>
+      </div>
+      {% endfor %}
 
-{% else %}
-<h1 class="content-section">Welcome to the Coder Lounge!</h1>
+      <p>Here's the list of Programmers you have sent a request to be paired with.</p>
+      <p>To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
 
-
-{% endif %}
-</div>
-
-
-{% for sent_request_user in test_user %}
-<div class="row">
-  <div class="column">
-    <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button id="request_sent_btn"> Request Sent </button>
-    </div>
+    {% else %}
     <br>
+
+
+    {% endif %}
+    </div>
+
+    {% for sent_request_user in test_user %}
+    <div class="row">
+      <div class="column">
+        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button type="button" onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn"> Request Sent </button>
+        </div>
+        <br>
+      </div>
+    </div>
+    {% endfor %}
+
+
+
+
   </div>
 </div>
-{% endfor %}
+</div>
+
+
 
 
 

@@ -9,11 +9,12 @@ body {
 .user-profile {
   margin-left: 3%;
   margin-top: 3%;
+
 }
 
-* {
+/* * {
   box-sizing: border-box;
-}
+} */
 
 
 body {
@@ -23,6 +24,11 @@ body {
 
 .user-profile {
   border-color: #332828;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2) */
+}
+
+.account-img {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
 }
 /* Float four columns side by side */
 .column {
@@ -36,14 +42,14 @@ body {
 
 /* Clear floats after the columns */
 .row:after {
-  content: "";
+  content:initial;
   display: table;
   clear: both;
 }
 
 /* Style the counter cards */
 .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
   text-align: center;
   background-color: #f1f1f1;
@@ -59,22 +65,26 @@ body {
 }
 
 
+
 #profile-image {
   size:50em
 }
 
 #request_sent_btn {
   background-color:rgb(183, 186, 187);
-  border-radius: 20%;
+  border-radius: 5%;
+  align-self: center;
 }
 
 #confirm_request_btn {
   background-color: rgb(146, 200, 175);
-  border-radius: 20%;
+  border-radius: 5%;
+  align-self: center;
 }
 
 #deny_request_btn {
   background-color: rgb(192, 155, 156);
-  border-radius: 20%;
+  border-radius: 5%;
+  align-self: center;
 
 }

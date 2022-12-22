@@ -110,7 +110,7 @@ class PairingRequests(db.Model):
                                 primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     receiever_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    #paired = boolean
+    is_paired = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
@@ -149,7 +149,7 @@ class Prompt(db.Model):
 
 def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
-    flask_app.config["SQLALCHEMY_ECHO"] = False
+    flask_app.config["SQLALCHEMY_ECHO"] = True
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     bcrypt = Bcrypt(flask_app)
     db.app = flask_app

@@ -10,6 +10,7 @@ from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
 from flask_bcrypt import Bcrypt
 import requests
+from flask import make_response
 
 from flask_login import login_user, current_user, logout_user
 import os
@@ -79,6 +80,7 @@ def register():
     return redirect(url_for('login'))
   else:
     print(form.errors)
+    print("HEEEEEEREEEE")
   return render_template("register.html", form=form)
 
 
@@ -191,14 +193,18 @@ def user_profile():
 
   paired_request_data = PairingRequests.query.filter_by(receiever_id=sender_user_id).all()
   paired_req_receiver_id = []
+  paired_con_reciever_id = []
 
   for paired_request_user in paired_request_data:
-    paired_req_receiver_id.append(paired_request_user.sender_id)
+    if not paired_request_user.paired:
+      paired_req_receiver_id.append(paired_request_user.sender_id)
+    else :
+      paired_con_reciever_id.append(paired_request_user.sender_id)
 
   sent_user = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
   pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
   print(pending_user, " here")
-  return render_template('user_profile.html', logged_in_user=logged_in_user, test_user=sent_user, pending_user=pending_user )
+  return render_template('user_profile.html', logged_in_user=logged_in_user, test_user=sent_user, pending_user=pending_user, paired = paired_con_reciever_id )
 
 
 @app.route('/home/users')
@@ -213,11 +219,15 @@ def get_users():
 
 @app.route('/logout')
 def logout():
-  logout_user()
+  # logout_user()
 
-  clearning_session = session.clear()
+  resp = make_response(redirect("/home"))
+  resp.set_cookie('session', '')
+  return resp
 
-  return render_template('homepage.html', clearning_session=clearning_session)
+  # clearing_session = session.clear()
+
+  # return redirect('/home', clearing_session=clearing_session)
 
 
 @app.route("/thank-you", methods=['GET', 'POST'])
