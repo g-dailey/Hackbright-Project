@@ -2,7 +2,7 @@
 
 {% block content %}
 <br>
-  <div>{% if test_user %}
+  <div>{% if request_sent %}
     <h3>Thank you for sending a request!</h3>
     <p>Here's the list of Programmers you have sent a request to be paired with.</p>
   {% else %}
@@ -21,13 +21,13 @@
         </tr>
       </thead>
 
-    {% for pairing_request_user in test_user %}
+    {% for pairing_request_user in sent_request_user %}
 
     <TR>
        <TD class="c2"> {{pairing_request_user.first_name}} </TD>
        <TD class="c3"> {{pairing_request_user.last_name}} </TD>
        <TD class="c4" > {{pairing_request_user.email}} </TD>
-      <TD> Request Submitted </TD>
+      <TD> <button type="button" class="btn btn-secondary">Request Submitted</button> <button type="button" class="btn btn-light">Cancel Request</button></TD>
   </TR>
 
   {% endfor %}

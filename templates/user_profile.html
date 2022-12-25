@@ -27,12 +27,12 @@
   </div>
   <div class="col">
 
-    <div>{% if test_user %}
+    <div>{% if request_sent %}
       <p>Here's the list of Programmers you have sent a request to do pair programming with you!</p>
       {% for pairing_request_user in pending_user %}
       <div class="row">
         <div class="column">
-          <div class="card"> {{pairing_request_user.first_name}} {{pairing_request_user.last_name}} <br>{{pairing_request_user.email}} <button type="button" onclick= "alert('Thank you for approving the request!')" id="confirm_request_btn"> Confirm Request </button> <button type="button" onclick= "alert('Denying Request Completed!')"id="deny_request_btn"> Deny Request </button>
+          <div class="card"> {{pairing_request_user.first_name}} {{pairing_request_user.last_name}} <br>{{pairing_request_user.email}} <button onclick= "alert('Thank you for approving the request!')" id="confirm_request_btn" type="button" class="btn btn-primary"> Confirm Request </button> <button type="button" class="btn btn-light" onclick= "alert('Denying Request Completed!')"id="deny_request_btn"> Deny Request </button>
           </div>
           <br>
         </div>
@@ -47,10 +47,11 @@
 
     <div>{% if paired %}
       <p>Here's the list of Programmers you have sent a request to do pair programming with you!</p>
-      {% for paired_user in paired %}
+
+      {% for paired_user in pending_user %}
       <div class="row">
         <div class="column">
-          <div class="card"> {{paired_user.first_name}} {{paired_user.last_name}} <br>{{paired_user.email}} <button type="button" onclick= "alert('Thank you for approving the request!')" id="confirm_request_btn"> Confirm Request </button> <button type="button" onclick= "alert('Denying Request Completed!')"id="deny_request_btn"> Deny Request </button>
+          <div class="card"> {{paired_user.first_name}} {{paired_user.last_name}} <br>{{paired_user.email}} <button type="button" onclick= "alert('Thank you for approving the request!')" id="confirm_request_btn" class="btn btn-primary"> Confirm Request </button> <button type="button" class="btn btn-danger" onclick= "alert('Denying Request Completed!')"id="deny_request_btn"> Deny Request </button>
           </div>
           <br>
         </div>
@@ -65,10 +66,10 @@
     {% endif %}
     </div>
 
-    {% for sent_request_user in test_user %}
+    {% for sent_request_user in sent_request_user %}
     <div class="row">
       <div class="column">
-        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button type="button" onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn"> Request Sent </button>
+        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn" type="button" class="btn btn-secondary"> Request Sent </button> <br> <button type="button" class="btn btn-light" id="request_sent_btn">Cancel Request</button>
         </div>
         <br>
       </div>

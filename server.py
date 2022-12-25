@@ -15,15 +15,12 @@ from flask import make_response
 from flask_login import login_user, current_user, logout_user
 import os
 from random import choice
-# import smtplib
 
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
 connect_to_db(app)
 app.secret_key = "DEV"
-
-
 
 @app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
@@ -57,7 +54,6 @@ def register():
                 prompt_difficulty_level=form.prompt_difficulty_level.data,
                 timezone_name=form.timezone_name.data
               )
-
     db.session.add(user)
     db.session.commit()
 
@@ -80,9 +76,37 @@ def register():
     return redirect(url_for('login'))
   else:
     print(form.errors)
-    print("HEEEEEEREEEE")
+
   return render_template("register.html", form=form)
 
+
+@app.route("/pair_request", methods=['GET', 'POST'])
+def pair_request():
+
+  logged_in_user_email=session.get('email', None)
+
+  if request.method == 'POST':
+    pairing_request_email = request.form.get("user_email")
+    session['user_email'] = pairing_request_email
+    sender_user = User.query.filter_by(email=logged_in_user_email).first()
+    sender_user_id = sender_user.user_id
+    receiver_user = User.query.filter_by(email=pairing_request_email).first()
+    pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
+            receiever_id=receiver_user.user_id)
+
+    db.session.add(pairing_request_db)
+    db.session.commit()
+
+    paired_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
+    paired_req_receiver_id = []
+    for paired_request_user in paired_request_data:
+      paired_req_receiver_id.append(paired_request_user.receiever_id)
+
+    sent_request_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
+
+    return render_template('pair_request.html', sent_request_user=sent_request_user, pairing_request_email=pairing_request_email)
+  else:
+    return render_template('homepage.html', pairing_request_email=pairing_request_email)
 
 
 @app.route('/pairedlist')
@@ -97,7 +121,17 @@ def paired_list():
   user_email=session.get('email', None)
 
   logged_in_user = User.query.filter_by(email= user_email).first()
+  sender_user_id = logged_in_user.user_id
   logged_in_user_languages = set()
+
+  paired_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
+  paired_req_receiver_id = []
+  for paired_request_user in paired_request_data:
+    paired_req_receiver_id.append(paired_request_user.receiever_id)
+
+  sent_request_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
+
+
 
   for language in logged_in_user.programming_languages:
     logged_in_user_languages.add(language.programming_language_name)
@@ -113,14 +147,17 @@ def paired_list():
   matching_users = []
   for user in all_users:
     matching = True
-    if not logged_in_user_languages.intersection((l.programming_language_name for l in user.programming_languages)):
-      matching = False
-    elif logged_in_user_timeslot not in [l.timeslot_name for l in user.selected_timeslots]:
-      matching = False
-    # elif logged_in_user_timezone != user.timezone:
-    #   matching = False
-    if matching:
-      matching_users.append(user)
+    if user not in sent_request_user:
+
+      if not logged_in_user_languages.intersection((l.programming_language_name for l in user.programming_languages)):
+        matching = False
+      elif logged_in_user_timeslot not in [l.timeslot_name for l in user.selected_timeslots]:
+        matching = False
+
+      # elif logged_in_user_timezone != user.timezone:
+      #   matching = False
+      if matching:
+        matching_users.append(user)
 
   return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,
                         all_users=matching_users, logged_in_user_languages=logged_in_user_languages,
@@ -146,38 +183,6 @@ def login():
   return render_template('login.html', form=form)
 
 
-@app.route("/pair_request", methods=['GET', 'POST'])
-def pair_request():
-
-  logged_in_user_email=session.get('email', None)
-
-  if request.method == 'POST':
-    pairing_request_email = request.form.get("user_email")
-    session['user_email'] = pairing_request_email
-    sender_user = User.query.filter_by(email=logged_in_user_email).first()
-    sender_user_id = sender_user.user_id
-    receiver_user = User.query.filter_by(email=pairing_request_email).first()
-    pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
-            receiever_id=receiver_user.user_id)
-
-    db.session.add(pairing_request_db)
-    db.session.commit()
-
-    paired_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
-    paired_req_receiver_id = []
-    for paired_request_user in paired_request_data:
-      paired_req_receiver_id.append(paired_request_user.receiever_id)
-
-    #How to have this show in the profile route as well?
-    test_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
-
-    print(test_user)
-    print('##################')
-
-    return render_template('pair_request.html', test_user=test_user, pairing_request_email=pairing_request_email)
-  else:
-    return render_template('homepage.html', pairing_request_email=pairing_request_email)
-
 @app.route("/profile", methods=['GET', 'POST'])
 def user_profile():
 
@@ -196,15 +201,16 @@ def user_profile():
   paired_con_reciever_id = []
 
   for paired_request_user in paired_request_data:
-    if not paired_request_user.paired:
+    if paired_request_user.pair_requested:
       paired_req_receiver_id.append(paired_request_user.sender_id)
     else :
       paired_con_reciever_id.append(paired_request_user.sender_id)
 
-  sent_user = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
+  sent_request_user = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
   pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
-  print(pending_user, " here")
-  return render_template('user_profile.html', logged_in_user=logged_in_user, test_user=sent_user, pending_user=pending_user, paired = paired_con_reciever_id )
+  print(pending_user, " pendinguser")
+
+  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_user=sent_request_user, pending_user=pending_user, paired = paired_con_reciever_id )
 
 
 @app.route('/home/users')

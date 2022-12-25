@@ -71,19 +71,16 @@ body {
 }
 
 #request_sent_btn {
-  background-color:rgb(183, 186, 187);
   border-radius: 5%;
   align-self: center;
 }
 
 #confirm_request_btn {
-  background-color: rgb(146, 200, 175);
   border-radius: 5%;
   align-self: center;
 }
 
 #deny_request_btn {
-  background-color: rgb(192, 155, 156);
   border-radius: 5%;
   align-self: center;
 
