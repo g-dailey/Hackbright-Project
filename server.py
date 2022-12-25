@@ -92,7 +92,7 @@ def pair_request():
     sender_user_id = sender_user.user_id
     receiver_user = User.query.filter_by(email=pairing_request_email).first()
     pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
-            receiever_id=receiver_user.user_id)
+            receiever_id=receiver_user.user_id, pair_requested=True)
 
     db.session.add(pairing_request_db)
     db.session.commit()
@@ -189,15 +189,19 @@ def user_profile():
 
   user_email=session.get('email', None)
   logged_in_user = User.query.filter_by(email= user_email).first()
-
   sender_user_id = logged_in_user.user_id
+
   sent_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
   sent_req_receiver_id = []
-
   for sent_request_user in sent_request_data:
     sent_req_receiver_id.append(sent_request_user.receiever_id)
 
   paired_request_data = PairingRequests.query.filter_by(receiever_id=sender_user_id).all()
+  received_req_receiver_id = []
+  for recieved_request_user in paired_request_data:
+    received_req_receiver_id.append(recieved_request_user.sender_id)
+
+
   paired_req_receiver_id = []
   paired_con_reciever_id = []
 
@@ -207,11 +211,13 @@ def user_profile():
     else :
       paired_con_reciever_id.append(paired_request_user.sender_id)
 
-  sent_request_user = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
-  pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
-  print(pending_user, " pendinguser")
+  sent_request_users = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
+  received_request_users = User.query.filter(User.user_id.in_(received_req_receiver_id)).all()
 
-  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_user=sent_request_user, pending_user=pending_user, paired = paired_con_reciever_id )
+  pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
+  print(sent_request_user, " pendinguser")
+
+  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users, received_request_users=received_request_users, paired = paired_con_reciever_id )
 
 
 @app.route('/home/users')
