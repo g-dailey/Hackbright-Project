@@ -148,16 +148,17 @@ def paired_list():
   for user in all_users:
     matching = True
     if user not in sent_request_user:
+      if user != logged_in_user:
 
-      if not logged_in_user_languages.intersection((l.programming_language_name for l in user.programming_languages)):
-        matching = False
-      elif logged_in_user_timeslot not in [l.timeslot_name for l in user.selected_timeslots]:
-        matching = False
+        if not logged_in_user_languages.intersection((l.programming_language_name for l in user.programming_languages)):
+          matching = False
+        elif logged_in_user_timeslot not in [l.timeslot_name for l in user.selected_timeslots]:
+          matching = False
 
-      # elif logged_in_user_timezone != user.timezone:
-      #   matching = False
-      if matching:
-        matching_users.append(user)
+        # elif logged_in_user_timezone != user.timezone:
+        #   matching = False
+        if matching:
+          matching_users.append(user)
 
   return render_template('user_pairedlist.html', user_email=user_email, logged_in_user=logged_in_user,
                         all_users=matching_users, logged_in_user_languages=logged_in_user_languages,
