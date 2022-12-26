@@ -54,10 +54,16 @@ body {
   text-align: center;
   background-color: #f1f1f1;
 }
-.friendlist {
-  background-color: rgb(136, 146, 140);
+.friendscontainer {
+  background-color: rgb(212, 228, 220);
 }
 
+#friendslist {
+  background-color: rgb(212, 228, 220);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+
+}
 /* Responsive columns - one column layout (vertical) on small screens */
 @media screen and (max-width: 600px) {
   .column {

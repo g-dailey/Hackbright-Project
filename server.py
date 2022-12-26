@@ -155,15 +155,10 @@ def paired_list():
 
   sent_request_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
 
-
-
   for language in logged_in_user.programming_languages:
     logged_in_user_languages.add(language.programming_language_name)
   for timeslot in logged_in_user.selected_timeslots:
     logged_in_user_timeslot = timeslot.timeslot_name
-  for prompt in all_prompts:
-    selected_prompts_name = prompt.prompt_name
-    selected_prompt_link = prompt.prompt_link
     # selected_prompt_diff_level = prompt.prompt_difficulty
   # for timezone in logged_in_user.timezone_name:
   #   logged_in_user_timezone = timezone.timezones
