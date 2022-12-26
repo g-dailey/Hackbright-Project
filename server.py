@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, PairingRequests, connect_to_db, db
+from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, PairingRequests, connect_to_db, db, PairingStatus
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
@@ -83,16 +83,18 @@ def register():
 @app.route("/pair_request", methods=['GET', 'POST'])
 def pair_request():
 
-  logged_in_user_email=session.get('email', None)
+  user_email=session.get('email', None)
+
+  logged_in_user = User.query.filter_by(email= user_email).first()
 
   if request.method == 'POST':
     pairing_request_email = request.form.get("user_email")
     session['user_email'] = pairing_request_email
-    sender_user = User.query.filter_by(email=logged_in_user_email).first()
+    sender_user = User.query.filter_by(email=user_email).first()
     sender_user_id = sender_user.user_id
     receiver_user = User.query.filter_by(email=pairing_request_email).first()
     pairing_request_db = PairingRequests(sender_id=sender_user.user_id,
-            receiever_id=receiver_user.user_id, pair_requested=True)
+            receiever_id=receiver_user.user_id)
 
     db.session.add(pairing_request_db)
     db.session.commit()
@@ -104,9 +106,9 @@ def pair_request():
 
     sent_request_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
 
-    return render_template('pair_request.html', sent_request_user=sent_request_user, pairing_request_email=pairing_request_email)
+    return render_template('pair_request.html', sent_request_user=sent_request_user, pairing_request_email=pairing_request_email, logged_in_user=logged_in_user)
   else:
-    return render_template('homepage.html', pairing_request_email=pairing_request_email)
+    return render_template('homepage.html', pairing_request_email=pairing_request_email, logged_in_user=logged_in_user)
 
 
 @app.route('/pairedlist')
@@ -184,40 +186,58 @@ def login():
   return render_template('login.html', form=form)
 
 
+@app.route("/pairing/<requestee_user_id>/confirm", methods=['POST'])
+def pairing_confirm(requestee_user_id):
+
+  user_email=session.get('email', None)
+  logged_in_user = User.query.filter_by(email= user_email).first()
+  current_user_id = logged_in_user.user_id
+
+  pairing_request = PairingRequests.query.filter_by(sender_id=requestee_user_id).\
+    filter_by(receiever_id=current_user_id).\
+    filter_by(pairing_status=PairingStatus.pending).first()
+
+  pairing_request.pairing_status = PairingStatus.approved
+  db.session.commit()
+
+  return redirect('/profile')
+
+
 @app.route("/profile", methods=['GET', 'POST'])
 def user_profile():
 
   user_email=session.get('email', None)
   logged_in_user = User.query.filter_by(email= user_email).first()
-  sender_user_id = logged_in_user.user_id
+  current_user_id = logged_in_user.user_id
 
-  sent_request_data = PairingRequests.query.filter_by(sender_id=sender_user_id).all()
-  sent_req_receiver_id = []
+  sent_request_data = PairingRequests.query.filter_by(sender_id=current_user_id).filter_by(pairing_status=PairingStatus.pending).all()
+  sent_req_user_ids = []
   for sent_request_user in sent_request_data:
-    sent_req_receiver_id.append(sent_request_user.receiever_id)
+    sent_req_user_ids.append(sent_request_user.receiever_id)
 
-  paired_request_data = PairingRequests.query.filter_by(receiever_id=sender_user_id).all()
-  received_req_receiver_id = []
-  for recieved_request_user in paired_request_data:
-    received_req_receiver_id.append(recieved_request_user.sender_id)
+  received_request_data = PairingRequests.query.filter_by(receiever_id=current_user_id).filter_by(pairing_status=PairingStatus.pending).all()
+
+  received_req_user_ids = []
+  for recieved_request_user in received_request_data:
+    received_req_user_ids.append(recieved_request_user.sender_id)
 
 
-  paired_req_receiver_id = []
-  paired_con_reciever_id = []
+  # paired_req_receiver_id = []
+  # paired_con_reciever_id = []
 
-  for paired_request_user in paired_request_data:
-    if paired_request_user.pair_requested:
-      paired_req_receiver_id.append(paired_request_user.sender_id)
-    else :
-      paired_con_reciever_id.append(paired_request_user.sender_id)
+  # for paired_request_user in paired_request_data:
+  #   if paired_request_user.pairing_status:
+  #     paired_req_receiver_id.append(paired_request_user.sender_id)
+  #   else :
+  #     paired_con_reciever_id.append(paired_request_user.sender_id)
 
-  sent_request_users = User.query.filter(User.user_id.in_(sent_req_receiver_id)).all()
-  received_request_users = User.query.filter(User.user_id.in_(received_req_receiver_id)).all()
+  sent_request_users = User.query.filter(User.user_id.in_(sent_req_user_ids)).all()
+  received_request_users = User.query.filter(User.user_id.in_(received_req_user_ids)).all()
 
-  pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
-  print(sent_request_user, " pendinguser")
+  # pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
 
-  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users, received_request_users=received_request_users, paired = paired_con_reciever_id )
+
+  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users, received_request_users=received_request_users )
 
 
 @app.route('/home/users')

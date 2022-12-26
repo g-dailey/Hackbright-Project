@@ -25,7 +25,6 @@
     </tr>
   </thead>
 
-  <form action="/pair_request" method="POST">
   {% for user in all_users %}
 
   <TR>
@@ -48,7 +47,11 @@
 
     <TD class="c4" >
 
-        <input type="radio" name="user_email" value=" name "> Send Request <br>
+
+        <form action="/pair_request" method="POST">
+        <input type="hidden" id="user_email" name="user_email" value="{{ user.email }}">
+        <input value="Send Request" type="submit" />
+      </form>
 
        </TD>
 
@@ -70,9 +73,8 @@
 <label> Please enter the email of the Programmer you would like to connect with!</label>
 
 <br>
-<input type="text" id="user_email" name="user_email" > <br>
-<input value="Submit" type="submit" />
+
   </table>
   <script src="/static/app.js"></script>
-</form>
+
 {% endblock content %}

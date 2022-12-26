@@ -6,6 +6,8 @@ import pandas as pd
 import csv
 
 from flask_login import LoginManager
+import enum
+from sqlalchemy import Integer, Enum
 
 
 
@@ -101,6 +103,11 @@ class UserTimeSlotMapping(db.Model):
     def __repr__(self):
         return f'<User Timeslot Mapping user_timeslot_mapping_id={self.user_timeslot_mapping_id} timeslot_id={self.timeslot_id}>'
 
+class PairingStatus(enum.Enum):
+    pending = 'Pending'
+    approved = 'Approved'
+    declined = 'Declined'
+
 
 class PairingRequests(db.Model):
     __tablename__ = "pairing_requests"
@@ -110,8 +117,7 @@ class PairingRequests(db.Model):
                                 primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     receiever_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-    pair_requested = db.Column(db.Boolean, default=False)
-    rejected_request = db.Column(db.Boolean, default=False)
+    pairing_status = db.Column(Enum(PairingStatus), default=PairingStatus.pending)
 
     def __repr__(self):
         return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
