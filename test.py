@@ -1,12 +1,34 @@
-import pandas as pd
-import csv
 
-user_filename = 'User-data.csv'
 
-with open(user_filename, 'r') as csvfile:
-    datareader = csv.reader(csvfile)
-    for row in datareader:
-        split_data = row[0].split("--")
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import json
 
-        first_name_data, last_name_data, email_data, pwd_data, prompt_diff_data, primary_lang_data, timezone_data, prog_name_data, selected_timeslots_data = split_data
-        print(timezone_data)
+api_file = "sendgrid_api.json"
+cred_file = open(api_file, 'r')
+cred_json = json.load(cred_file)
+sendgrid_api_key = cred_json["sendggrid_api_key"]
+
+# import sendgrid
+# import os
+
+# sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('sendgrid_api_key'))
+# response = sg.client._("suppression/bounces").get()
+# print(response.status_code)
+# print(response.body)
+# print(response.headers)
+message = Mail(
+    from_email='gulafroz.test@gmail.com',
+    to_emails='gulafroz.rezai@gmail.com',
+    subject='Sending with Twilio SendGrid is Fun',
+    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+try:
+    sg = SendGridAPIClient(os.environ.get('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'))
+    response = sg.send(message)
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+except Exception as e:
+    print(e.message)
+

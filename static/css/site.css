@@ -54,6 +54,9 @@ body {
   text-align: center;
   background-color: #f1f1f1;
 }
+.friendlist {
+  background-color: rgb(136, 146, 140);
+}
 
 /* Responsive columns - one column layout (vertical) on small screens */
 @media screen and (max-width: 600px) {

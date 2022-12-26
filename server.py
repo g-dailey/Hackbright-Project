@@ -4,23 +4,46 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, PairingRequests, connect_to_db, db, PairingStatus
+from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, \
+  PairingRequests, connect_to_db, db, PairingStatus
 import jinja2
 from forms import SignUpForm, LoginForm, UpdateAccountForm
 import json
 from flask_bcrypt import Bcrypt
 import requests
 from flask import make_response
-
 from flask_login import login_user, current_user, logout_user
-import os
 from random import choice
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+api_file = "sendgrid_api.json"
+cred_file = open(api_file, 'r')
+cred_json = json.load(cred_file)
+sendgrid_api_key = cred_json["sendggrid_api_key"]
 
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
 connect_to_db(app)
 app.secret_key = "DEV"
+
+
+
+# message = Mail(
+#     from_email='gulafroz.test@gmail.com',
+#     to_emails='gulafroz.rezai@gmail.com',
+#     subject='Sending with Twilio SendGrid is Fun',
+#     html_content='<strong>and easy to do anywhere, even with Python</strong>')
+# try:
+#     sg = SendGridAPIClient(os.environ.get(sendgrid_api_key))
+#     response = sg.send(message)
+#     print(response.status_code)
+#     print(response.body)
+#     print(response.headers)
+# except Exception as e:
+#     print(e.message)
 
 @app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
@@ -30,13 +53,11 @@ def home():
 
   for user in all_users:
     logged_in_user = User.query.filter_by(email= user_email).first()
-  return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user )
+  return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
-  # if current_user.is_authenticated:
-  #   return redirect(url_for('home'))
   form = SignUpForm(request.form)
 
   if form.validate_on_submit():
@@ -44,7 +65,7 @@ def register():
     # bcrypt = Bcrypt(app)
     # hashed_password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
 
-    flash(f'Account Created for {form.first_name.data}! You can now login!', 'success') #this success message is not showing
+    flash(f'Account Created for {form.first_name.data}! You can now login!', 'success')
 
     user = User(email=form.email.data,
                 password=form.password.data,
@@ -106,7 +127,8 @@ def pair_request():
 
     sent_request_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
 
-    return render_template('pair_request.html', sent_request_user=sent_request_user, pairing_request_email=pairing_request_email, logged_in_user=logged_in_user)
+    return render_template('pair_request.html', sent_request_user=sent_request_user, pairing_request_email=pairing_request_email,
+                          logged_in_user=logged_in_user)
   else:
     return render_template('homepage.html', pairing_request_email=pairing_request_email, logged_in_user=logged_in_user)
 
@@ -210,35 +232,33 @@ def user_profile():
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
 
-  sent_request_data = PairingRequests.query.filter_by(sender_id=current_user_id).filter_by(pairing_status=PairingStatus.pending).all()
+  sent_request_data = PairingRequests.query.filter_by(sender_id=current_user_id).\
+    filter_by(pairing_status=PairingStatus.pending).all()
   sent_req_user_ids = []
   for sent_request_user in sent_request_data:
     sent_req_user_ids.append(sent_request_user.receiever_id)
 
-  received_request_data = PairingRequests.query.filter_by(receiever_id=current_user_id).filter_by(pairing_status=PairingStatus.pending).all()
+  received_request_data = PairingRequests.query.filter_by(receiever_id=current_user_id).\
+    filter_by(pairing_status=PairingStatus.pending).all()
+
+  approved_request_data = PairingRequests.query.filter_by(receiever_id=current_user_id).\
+    filter_by(pairing_status=PairingStatus.approved).all()
 
   received_req_user_ids = []
   for recieved_request_user in received_request_data:
     received_req_user_ids.append(recieved_request_user.sender_id)
 
-
-  # paired_req_receiver_id = []
-  # paired_con_reciever_id = []
-
-  # for paired_request_user in paired_request_data:
-  #   if paired_request_user.pairing_status:
-  #     paired_req_receiver_id.append(paired_request_user.sender_id)
-  #   else :
-  #     paired_con_reciever_id.append(paired_request_user.sender_id)
+  approved_req_user_ids = []
+  for approved_request_user in approved_request_data:
+    approved_req_user_ids.append(approved_request_user.sender_id)
 
   sent_request_users = User.query.filter(User.user_id.in_(sent_req_user_ids)).all()
   received_request_users = User.query.filter(User.user_id.in_(received_req_user_ids)).all()
+  approved_request_users = User.query.filter(User.user_id.in_(approved_req_user_ids)).all()
 
-  # pending_user = User.query.filter(User.user_id.in_(paired_req_receiver_id)).all()
 
-
-  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users, received_request_users=received_request_users )
-
+  return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users,
+                        received_request_users=received_request_users,approved_request_users=approved_request_users)
 
 @app.route('/home/users')
 def get_users():
@@ -252,16 +272,10 @@ def get_users():
 
 @app.route('/logout')
 def logout():
-  # logout_user()
 
   resp = make_response(redirect("/home"))
   resp.set_cookie('session', '')
   return resp
-
-  # clearing_session = session.clear()
-
-  # return redirect('/home', clearing_session=clearing_session)
-
 
 @app.route("/thank-you", methods=['GET', 'POST'])
 def thankyou():
@@ -271,3 +285,4 @@ def thankyou():
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
 
+#https://getbootstrap.com/docs/4.0/layout/grid/

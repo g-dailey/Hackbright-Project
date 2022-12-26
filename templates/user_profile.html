@@ -15,33 +15,57 @@
 </script>
 
 
-
-</div>
-<div class="row">
-  <div class="col">
-    <div class ="user-profile">
-      <h3>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h3>
-    <div class ="content-section">
-      <div id="profile-image">
-      <div class="media">
-        <img class="rounded-circle account-img" src="static/default-image.jpeg" width="200" height="200">
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class ="user-profile">
+          <h3>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h3>
+        <div class ="content-section">
+          <div id="profile-image">
+          <div class="media">
+            <img class="rounded-circle account-img" src="static/default-image.jpeg" width="200" height="200">
+          </div>
+        </div>
+        </div>
       </div>
+      <div class="col">
+
+        <div class="media-body">
+          <h3 class="account-heading">{{ logged_in_user.first_name }} {{ logged_in_user.last_name }}</h3>
+          <h5 class="text-secondary">{{ logged_in_user.email }}</h5>
+          {% for lang in logged_in_user.programming_languages %}
+          <h5 class ="text-secondary">{{ lang.programming_language_name }} </h5>
+          {% endfor %}
+          <h3 class="text-secondary">{{logged_in_user.primary_language_name}}</h3>
+        </div>
+
+      </div>
+
+
     </div>
+    <div class="col">
+
+      <div class="friendslist">
+
+        <p>Here's the list of Programmers who you have been APPROVED to be paired with.</p>
+        {% for approved_request_user in approved_request_users %}
+        <div class="col">
+
+            <div class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
+            <br>
+
+        </div>
+        {% endfor %}
+
+
+
     </div>
   </div>
-  <div class="col">
-
-    <div class="media-body">
-      <h3 class="account-heading">{{ logged_in_user.first_name }} {{ logged_in_user.last_name }}</h3>
-      <h5 class="text-secondary">{{ logged_in_user.email }}</h5>
-      {% for lang in logged_in_user.programming_languages %}
-      <h5 class ="text-secondary">{{ lang.programming_language_name }} </h5>
-      {% endfor %}
-      <h3 class="text-secondary">{{logged_in_user.primary_language_name}}</h3>
-    </div>
-  </div>
-
-  <div class="col">
+  <div class="row">
+    <div class="col">
 
       <p>Here's the list of Programmers you have received a request to be paired with.</p>
 
@@ -55,6 +79,7 @@
             <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
               Confirm Request
             </button>
+
             <button type="button" class="btn btn-danger" onclick="alert('Denying Request Completed!')"id="deny_request_btn">
               Deny Request
             </button>
@@ -64,7 +89,8 @@
       </div>
       {% endfor %}
 
-
+    </div>
+    <div class="col">
 
     </div>
     <p>Here's the list of Programmers you have sent a request to be paired with.</p>
@@ -77,11 +103,34 @@
       </div>
     </div>
     {% endfor %}
+  </div>
 
+
+    </div>
+    <div class="col">
+
+    </div>
+    <p>To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
+    </div>
+
+    </div>
   </div>
 </div>
-<p>To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {% endblock content %}
