@@ -3,23 +3,29 @@
 {% block content %}
 
 
-<div class="container">
+<div class="container" id="homepagebackground">
   <br>
 
 
-  <div>{% if user_email %}
-    <h3>Welcome to the Coder Lounge, {{ logged_in_user.first_name }}!</h3>
+  <div >{% if user_email %}
+    <h3 style="color:rgb(197, 196, 194);">Welcome to the Coder Lounge, {{ logged_in_user.first_name }}! </h3>
     {% else %}
-    <h3 class="content-section">Welcome to the Coder Lounge!</h3>
+    <h3 style="color:rgb(197, 196, 194);" class="content-section" >Welcome to the Coder Lounge!</h3>
     {% endif %}
   </div>
   <br>
-  <img src="/static/coder.png" alt="" width="500" height="400">
+  <style>
+    #homepagebackground {
+      background-image: url('static/logo-tag.png');
+
+    }
+    </style>
+
   <br>
 </div>
 <div class="main-body">
  <br>
-  <p>Through Coder Lounge you will get paired with Programmers to solve problems together!</p>
+  <p style="color:rgb(197, 196, 194);" >Through Coder Lounge you will get paired with Programmers to solve problems together!</p>
   <br>
 </div>
 

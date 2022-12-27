@@ -2,14 +2,15 @@
 
 
 body {
-  background: white;
+  background: rgb(29, 31, 29);
   font-family: "Quicksand";
+  /* background: rgb(27, 31, 28); */
+
 }
 
 .user-profile {
   margin-left: 3%;
   margin-top: 3%;
-
 }
 
 body {
@@ -43,9 +44,9 @@ body {
   text-align: center;
   background-color: #f1f1f1;
 }
+
 .friendscontainer {
   padding-top:3%;
-
 }
 
 #friendslist {
@@ -53,6 +54,31 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   margin-top: 20px;
 }
+
+#homepagebackground{
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1030px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position:relative;
+  background-size:contain, cover;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  img.bg {
+    left: 50%;
+    margin-left: -512px;
+  }
+}
+
 #profilebox {
   background-color: rgb(227, 225, 224);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -60,9 +86,9 @@ body {
 }
 #footer {
   text-align: center;
-  background-color: rgba(2, 1, 1, 0.851);
-  color:#868383;
-  margin-bottom: 1%;
+  background-color: rgba(219, 219, 219, 0.851);
+  color:#4d4b4b;
+  margin-bottom: 0%;
 }
 
 @media screen and (max-width: 600px) {
