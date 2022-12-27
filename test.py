@@ -20,11 +20,11 @@ sendgrid_api_key = cred_json["sendggrid_api_key"]
 # print(response.headers)
 message = Mail(
     from_email='gulafroz.test@gmail.com',
-    to_emails='gulafroz.rezai@gmail.com',
+    to_emails='gulafroz.test@gmail.com',
     subject='Sending with Twilio SendGrid is Fun',
     html_content='<strong>and easy to do anywhere, even with Python</strong>')
 try:
-    sg = SendGridAPIClient(os.environ.get(''))
+    sg = SendGridAPIClient(os.environ.get(sendgrid_api_key))
     response = sg.send(message)
     print(response.status_code)
     print(response.body)

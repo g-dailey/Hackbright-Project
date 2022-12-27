@@ -45,14 +45,22 @@
     </div>
 
 
-
     <div class="col" id="friendslist">
+      <style>
+        #friendslist {
+          background-image: url('static/v935-aum-03_2.jpeg');
+        }
+        </style>
+
+
     <div class="col">
       <div class="friendscontainer">
+
         <p>Here's the list of Programmers who you have been APPROVED to be paired with.</p>
         {% for approved_request_user in approved_request_users %}
         <div class="col">
         <div class="column">
+
             <div class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
             <br>
       </div>
