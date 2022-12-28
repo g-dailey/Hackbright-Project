@@ -18,7 +18,7 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-api_file = "sendgrid_api.json"
+api_file = "/Users/gedailey/src/hackbright-project/sendgrid_api.json"
 cred_file = open(api_file, 'r')
 cred_json = json.load(cred_file)
 sendgrid_api_key = cred_json["sendggrid_api_key"]
@@ -45,15 +45,33 @@ app.secret_key = "DEV"
 # except Exception as e:
 #     print(e.message)
 
+animated_gifs = ["https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif",
+                "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+                "https://media.giphy.com/media/scZPhLqaVOM1qG4lT9/giphy.gif",
+                "https://media.giphy.com/media/u2pmTWUi0MXjyrMaVj/giphy.gif",
+                "https://media.giphy.com/media/CuuSHzuc0O166MRfjt/giphy.gif",
+                "https://media.giphy.com/media/fwbZnTftCXVocKzfxR/giphy.gif",
+                "https://media.giphy.com/media/bAQH7WXKqtIBrPs7sR/giphy.gif",
+                "https://media.giphy.com/media/MT5UUV1d4CXE2A37Dg/giphy.gif",
+                "https://media.giphy.com/media/vzO0Vc8b2VBLi/giphy.gif",
+                "https://media.giphy.com/media/dBlZwFc1QjzXseX7aT/giphy.gif",
+                "https://media.giphy.com/media/R03zWv5p1oNSQd91EP/giphy.gif",
+                "https://media.giphy.com/media/B2591lrr3PHTM4cHuD/giphy.gif",
+                "https://media.giphy.com/media/VTtANKl0beDFQRLDTh/giphy.gif",
+                "https://media.giphy.com/media/wGEymBvo6FUlR9bbda/giphy.gif"
+                ]
 @app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def home():
+  #https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif
   all_users = User.query.all()
   user_email=session.get('email', None)
+  all_prompts = Prompt.query.all()
+  gifs = animated_gifs
 
   for user in all_users:
     logged_in_user = User.query.filter_by(email= user_email).first()
-  return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user)
+  return render_template("homepage.html",user_email=user_email, logged_in_user=logged_in_user, all_prompts=all_prompts,gifs=gifs)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -196,7 +214,7 @@ def login():
       if user and password:
         session['email'] = form.email.data
         user_email = session['email']
-        return redirect(url_for('user_profile'))
+        return redirect(url_for('/home'))
     else:
       flash('Login Failed, please check email and password and try again!', 'danger')
 
@@ -245,7 +263,7 @@ def pairing_cancel(requestee_user_id):
   pairing_request_cancel = PairingRequests.query.filter_by(sender_id=requestee_user_id).\
     filter_by(receiever_id=current_user_id).\
     filter_by(pairing_status=PairingStatus.pending).first()
-  pairing_request_cancel.delete()
+  db.session.delete(pairing_request_cancel)
   db.session.commit()
 
   return redirect('/profile')
@@ -285,6 +303,17 @@ def user_profile():
   return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users,
                         received_request_users=received_request_users,approved_request_users=approved_request_users)
 
+
+
+@app.route("/update_account", methods=['GET', 'POST'])
+def update_account():
+
+  user_email=session.get('email', None)
+  logged_in_user = User.query.filter_by(email= user_email).first()
+  current_user_id = logged_in_user.user_id
+
+  return render_template('update_account.html', logged_in_user=logged_in_user)
+
 @app.route('/home/users')
 def get_users():
 
@@ -309,5 +338,3 @@ def thankyou():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
-
-#https://getbootstrap.com/docs/4.0/layout/grid/

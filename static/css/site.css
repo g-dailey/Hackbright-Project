@@ -42,11 +42,22 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
   text-align: center;
-  background-color: #f9de9e;
+  background-color: #e1ae4f;
 }
 
 .friendscontainer {
   padding-top:3%;
+}
+
+#daily_prompt_bar {
+  /* text-align: right; */
+  width: 30%;
+  height: 80%;
+  float: right;
+}
+
+#promptcard {
+  background-color:rgba(0, 0, 0, 0.2);
 }
 
 #welcomesign {
@@ -116,6 +127,7 @@ body {
   color:#4d4b4b;
   margin-bottom: 0%;
 }
+
 
 @media screen and (max-width: 600px) {
   .column {

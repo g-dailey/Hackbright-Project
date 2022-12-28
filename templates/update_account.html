@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class ="user-profile">
+          <h5 style="color:rgb(197, 196, 194);">You can update your account here, {{ logged_in_user.first_name }}!</h5>
+        <div class ="content-section">
+          <div id="profile-image">
+          <div class="media">
+            <img class="rounded-circle account-img" src="static/default-image.jpeg" width="200" height="200">
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div style="color:rgb(197, 196, 194);" class="col">
+        <div class="media-body">
+          <h3 style="color:rgb(197, 196, 194);"class="account-heading">{{ logged_in_user.first_name }} {{ logged_in_user.last_name }}</h3>
+          <h5 style="color:rgb(197, 196, 194);"class="text-secondary">{{ logged_in_user.email }}</h5>
+          {% for lang in logged_in_user.programming_languages %}
+          <h5 style="color:rgb(197, 196, 194);" class ="text-secondary">{{ lang.programming_language_name }} </h5>
+          {% endfor %}
+          <h3 style="color:rgb(197, 196, 194);" class="text-secondary">{{logged_in_user.primary_language_name}}</h3>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

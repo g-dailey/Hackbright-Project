@@ -7,26 +7,44 @@
   <br>
 
 
-  <div >{% if user_email %}
-    <h1 id="welcomesign" style="color:rgb(197, 196, 194);">Welcome to the Coder Lounge, {{ logged_in_user.first_name }}! </h1>
-    {% else %}
-    <h3 id="welcomesign" style="color:rgb(197, 196, 194);" class="content-section" >Welcome to the Coder Lounge!</h3>
-    {% endif %}
+  <div class="container">
+    <div class="col">
+      <div class="col-sm">
+      </div>
+      </div>
+
+      <div id="daily_prompt_bar" class="col">
+        <div class="card">
+          <h5 >Why should I practice leetcode style problems? </h5>
+          <p> "Leetcode-style problems have many benefits aside from the technical learnings they can provide.
+            These types of problems tend to force developers into choosing one among many different paths of implementation.
+            These are great practice for learning new algorithms, data structures, and approaches to solving problems." Reference: cult.honepot.io </p>
+         <div id="promptcard" class="card"> <p>Prompt of the right this moment: </p>
+          <a href= "{{ (all_prompts | random).prompt_link }}"> Leetcode Problem: {{ (all_prompts | random).prompt_name }}</a> </div>
+          <img src="{{gifs | random }}">
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-sm">
+
+        <div >{% if user_email %}
+          <h1 id="welcomesign" style="color:rgb(197, 196, 194);">Welcome to the Coder Lounge, {{ logged_in_user.first_name }}! </h1>
+          {% else %}
+          <h3 id="welcomesign" style="color:rgb(197, 196, 194);" class="content-section" >Welcome to the Coder Lounge!</h3>
+          {% endif %}
+        </div>
+        <br>
+        <style>
+          #homepagebackground {
+            background-image: url('static/logo-tag.png');
+          }
+          </style>
+        <br>
+      </div>
+      </div>
+    </div>
   </div>
-  <br>
-  <style>
-    #homepagebackground {
-      background-image: url('static/logo-tag.png');
-
-    }
-    </style>
-
-  <br>
-</div>
-<div class="main-body">
- <br>
-  <p style="color:rgb(197, 196, 194);" >Through Coder Lounge you will get paired with Programmers to solve problems together!</p>
-  <br>
-</div>
 
 {% endblock content %}
