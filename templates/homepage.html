@@ -8,9 +8,9 @@
 
 
   <div >{% if user_email %}
-    <h3 style="color:rgb(197, 196, 194);">Welcome to the Coder Lounge, {{ logged_in_user.first_name }}! </h3>
+    <h1 id="welcomesign" style="color:rgb(197, 196, 194);">Welcome to the Coder Lounge, {{ logged_in_user.first_name }}! </h1>
     {% else %}
-    <h3 style="color:rgb(197, 196, 194);" class="content-section" >Welcome to the Coder Lounge!</h3>
+    <h3 id="welcomesign" style="color:rgb(197, 196, 194);" class="content-section" >Welcome to the Coder Lounge!</h3>
     {% endif %}
   </div>
   <br>

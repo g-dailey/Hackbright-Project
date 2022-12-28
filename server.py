@@ -219,6 +219,36 @@ def pairing_confirm(requestee_user_id):
 
   return redirect('/profile')
 
+@app.route("/pairing/<requestee_user_id>/decline", methods=['POST'])
+def pairing_decline(requestee_user_id):
+
+  user_email=session.get('email', None)
+  logged_in_user = User.query.filter_by(email= user_email).first()
+  current_user_id = logged_in_user.user_id
+
+  pairing_request = PairingRequests.query.filter_by(sender_id=requestee_user_id).\
+    filter_by(receiever_id=current_user_id).\
+    filter_by(pairing_status=PairingStatus.pending).first()
+
+  pairing_request.pairing_status = PairingStatus.declined
+  db.session.commit()
+
+  return redirect('/profile')
+
+@app.route("/pairing/<requestee_user_id>/cancel", methods=['POST'])
+def pairing_cancel(requestee_user_id):
+
+  user_email=session.get('email', None)
+  logged_in_user = User.query.filter_by(email= user_email).first()
+  current_user_id = logged_in_user.user_id
+
+  pairing_request_cancel = PairingRequests.query.filter_by(sender_id=requestee_user_id).\
+    filter_by(receiever_id=current_user_id).\
+    filter_by(pairing_status=PairingStatus.pending).first()
+  pairing_request_cancel.delete()
+  db.session.commit()
+
+  return redirect('/profile')
 
 @app.route("/profile", methods=['GET', 'POST'])
 def user_profile():

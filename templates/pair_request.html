@@ -3,10 +3,10 @@
 {% block content %}
 <br>
   <div>{% if request_sent %}
-    <h3>Thank you for sending a request!</h3>
-    <p>Here's the list of Programmers you have sent a request to be paired with.</p>
+    <h3 style="color:rgb(197, 196, 194);" >Thank you for sending a request!</h3>
+    <p style="color:rgb(197, 196, 194);">Here's the list of Programmers you have sent a request to be paired with.</p>
   {% else %}
-  <h1 class="content-section">Welcome to the Coder Lounge!</h1>
+  <h1 style="color:rgb(197, 196, 194);" class="content-section">Welcome to the Coder Lounge!</h1>
   {% endif %}
 </div>
 
@@ -14,19 +14,19 @@
     <table  class="table table-striped" >
       <thead>
         <tr>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Pairing Status</th>
+          <th style="color:rgb(197, 196, 194);" scope="col">First Name</th>
+          <th style="color:rgb(197, 196, 194);" scope="col">Last Name</th>
+          <th style="color:rgb(197, 196, 194);" scope="col">Email</th>
+          <th style="color:rgb(197, 196, 194);" scope="col">Pairing Status</th>
         </tr>
       </thead>
 
     {% for pairing_request_user in sent_request_user %}
 
     <TR>
-       <TD class="c2"> {{pairing_request_user.first_name}} </TD>
-       <TD class="c3"> {{pairing_request_user.last_name}} </TD>
-       <TD class="c4" > {{pairing_request_user.email}} </TD>
+       <TD style="color:rgb(197, 196, 194);" class="c2"> {{pairing_request_user.first_name}} </TD>
+       <TD style="color:rgb(197, 196, 194);"  class="c3"> {{pairing_request_user.last_name}} </TD>
+       <TD style="color:rgb(197, 196, 194);" class="c4" > {{pairing_request_user.email}} </TD>
       <TD> <button type="button" class="btn btn-secondary">Request Submitted</button> <button type="button" class="btn btn-light">Cancel Request</button></TD>
   </TR>
 
@@ -36,6 +36,6 @@
 </body>
 </html>
 
-<h3>To send more requests to Programmers, <a href="\pairedlist">check out here!</a></h3>
+<h3 style="color:rgb(197, 196, 194);" >To send more requests to Programmers, <a href="\pairedlist">check out here!</a></h3>
 <br>
 {% endblock content %}

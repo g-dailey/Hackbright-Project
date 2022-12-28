@@ -3,7 +3,6 @@
 {% block content %}
 
 <script type="text/javascript">
-
   function confirmRequest(requestee_user_id) {
 
     if (window.confirm("Do you want to confirm this request?")) {
@@ -11,7 +10,26 @@
       window.location.reload();
     }
   }
+</script>
 
+<script type="text/javascript">
+  function declineRequest(requestee_user_id) {
+
+    if (window.confirm("Do you want to decline this request?")) {
+      fetch(`/pairing/${requestee_user_id}/decline`, {method: 'POST'});
+      window.location.reload();
+    }
+  }
+</script>
+
+<script type="text/javascript">
+  function cancelRequest(requestee_user_id) {
+
+    if (window.confirm("Are you sure you want to cancel this request?")) {
+      fetch(`/pairing/${requestee_user_id}/cancel`, {method: 'POST'});
+      window.location.reload();
+    }
+  }
 </script>
 
 
@@ -49,9 +67,8 @@
       <style>
         #friendslist {
           background-image: url('static/v935-aum-03_2.jpeg');
-
         }
-        </style>
+      </style>
 
     <div class="col">
       <div class="friendscontainer">
@@ -61,8 +78,8 @@
         <div class="col">
         <div class="column">
 
-            <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
-            <br>
+          <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
+          <br>
       </div>
 
         </div>
@@ -84,9 +101,12 @@
             <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
               Confirm Request
             </button>
-            <button type="button" class="btn btn-danger" onclick="alert('Denying Request Completed!')"id="deny_request_btn">
+
+            <button type="button" onclick="declineRequest({{ paired_user.user_id }})" id="deny_request_btn" class="btn btn-danger">
               Deny Request
             </button>
+
+
           </div>
           <br>
         </div>
@@ -101,7 +121,12 @@
     {% for sent_request_user in sent_request_users %}
     <div class="row">
       <div class="column">
-        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn" type="button" class="btn btn-secondary"> Request Sent </button> <br> <button type="button" class="btn btn-light" id="request_sent_btn">Cancel Request</button>
+        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn" type="button" class="btn btn-secondary"> Request Sent </button> <br>
+
+          <button type="button" onclick="cancelRequest({{ sent_request_user.user_id }})" id="cancel_request_btn" class="btn btn-light">
+            Cancel Request
+            </button>
+
         </div>
         <br>
       </div>

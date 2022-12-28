@@ -42,23 +42,44 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
   text-align: center;
-  background-color: #f1f1f1;
+  background-color: #f9de9e;
 }
 
 .friendscontainer {
   padding-top:3%;
 }
 
+#welcomesign {
+  margin-top: 380px;
+  margin-left: 350px;
+  font-size: 21px;
+  /* text-align: center; */
+
+  -webkit-animation: fadein 10s; /* Safari, Chrome and Opera > 12.1 */
+     -moz-animation: fadein 2s; /* Firefox < 16 */
+      -ms-animation: fadein 2s; /* Internet Explorer */
+       -o-animation: fadein 2s; /* Opera < 12.1 */
+          animation: fadein 2s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 10; }
+}
 #friendslist {
   background-color: rgb(227, 225, 224);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   margin-top: 20px;
+}
+#username {
+  text-align: right;
 }
 
 #homepagebackground{
   /* Set rules to fill background */
   min-height: 100%;
   min-width: 1030px;
+  animation: fadeIn 5s;
 
   /* Set up proportionate scaling */
   width: 100%;
@@ -70,6 +91,11 @@ body {
   background-repeat: no-repeat;
   top: 0;
   left: 0;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 @media screen and (max-width: 1024px) {
