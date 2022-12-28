@@ -7,6 +7,7 @@ import pandas as pd
 from flask_login import current_user
 import csv
 import pytz
+from flask_login import current_user
 
 user_filename = 'User-data.csv'
 # from flask_login import login_user, current_user, logout_user, login_required
@@ -45,13 +46,18 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
   email = StringField('Email', validators=[DataRequired(), Email()])
   picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+  prompt_difficulty_level = RadioField('Prompt Difficulty Level', choices=[(1, 'Easy'), (2, 'Medium'), (3, 'Hard')], validators=[DataRequired()])
+  primary_language = SelectField('Primary Language',choices=[('eng', 'English'), ('sp', 'Spanish'), ('fr', 'French'), ('fa', 'Farsi'), ('ge', 'German')], validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
+  programming_language_label = SelectMultipleField('Programming Language', choices=[('C++', 'C++'), ('py', 'Python'), ('js', 'JavaScript'), ('ja', 'Java'), ('C', 'C')]) #how to make this a multiple select field and still exist in this form?
+
+  timezone_name = SelectField('Timezone', choices=pytz.all_timezones, validators=[DataRequired()]) #how to make this a single select field and still exist in this form?
+
+  # day_of_week = SelectMultipleField('Day of the Week', choices=[('1', 'Sunday'), ('2', 'Monday'), ('3', 'Tuesday'), ('4', 'Wednesday'), ('5', 'Thursday'), ('6', 'Friday'), ('7', 'Saturday')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
+  timeslot_label = SelectMultipleField('Time Slots', choices=[('7am', '7am - 10am'), ('10am', '10am - 1pm'), ('1pm', '1pm - 4pm'), ('4pm', '4pm - 7pm'), ('7pm', '7pm - 10pm'), ('10pm', '10pm - 12am')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
   submit = SubmitField('Update')
 
   def validate_email(self, email):
-    #how to validate if email already exists?
-    if email.data != email.email:
-
+    if email.data != current_user.email:
       user = User.query.filter_by(email=email.data).first()
-
       if user:
         raise ValidationError('That email is taken, please choose a different one.')

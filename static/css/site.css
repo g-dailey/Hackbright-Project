@@ -137,6 +137,11 @@ body {
   }
 }
 
+#updateaccount {
+  width: 50%;
+  float: left;
+}
+
 #profile-image {
   size:50em
 }

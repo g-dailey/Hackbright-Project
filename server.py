@@ -303,16 +303,18 @@ def user_profile():
   return render_template('user_profile.html', logged_in_user=logged_in_user, sent_request_users=sent_request_users,
                         received_request_users=received_request_users,approved_request_users=approved_request_users)
 
-
-
 @app.route("/update_account", methods=['GET', 'POST'])
 def update_account():
-
+  form = UpdateAccountForm()
   user_email=session.get('email', None)
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
 
-  return render_template('update_account.html', logged_in_user=logged_in_user)
+  profile_picture = url_for('static', filename="profile_pics/"+logged_in_user.profile_picture)
+
+
+
+  return render_template('update_account.html', logged_in_user=logged_in_user, form=form, profile_picture=profile_picture)
 
 @app.route('/home/users')
 def get_users():
