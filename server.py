@@ -83,7 +83,6 @@ def register():
     # bcrypt = Bcrypt(app)
     # hashed_password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
 
-    flash(f'Account Created for {form.first_name.data}! You can now login!', 'success')
 
     user = User(email=form.email.data,
                 password=form.password.data,
@@ -310,9 +309,29 @@ def update_account():
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
 
+  if form.validate_on_submit():
+    logged_in_user.first_name = form.first_name.data
+    logged_in_user.last_name = form.last_name.data
+    logged_in_user.email = form.email.data
+    # logged_in_user.picture = form.picture.data
+    logged_in_user.prompt_difficulty_level = form.prompt_difficulty_level.data
+    logged_in_user.primary_language = form.primary_language.data
+    # logged_in_user.programming_language_label = form.programming_language_label.data
+    logged_in_user.timezone_name = form.timezone_name.data
+    db.session.commmit()
+    flash('Your account has been updated!', 'success')
+    return redirect(url_for('update_account'))
+  elif request.method == 'GET':
+    form.first_name.data = logged_in_user.first_name
+    form.last_name.data = logged_in_user.last_name
+    form.email.data = logged_in_user.email
+    # form.picture.data = logged_in_user.picture
+    form.prompt_difficulty_level.data = logged_in_user.prompt_difficulty_level
+    form.primary_language.data = logged_in_user.primary_language
+    # form.programming_language_label.data = logged_in_user.programming_language_label
+    form.timezone_name.data = logged_in_user.timezone_name
+
   profile_picture = url_for('static', filename="profile_pics/"+logged_in_user.profile_picture)
-
-
 
   return render_template('update_account.html', logged_in_user=logged_in_user, form=form, profile_picture=profile_picture)
 

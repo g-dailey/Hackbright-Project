@@ -47,6 +47,7 @@ body {
 
 .friendscontainer {
   padding-top:3%;
+
 }
 
 #registerbox {
@@ -91,9 +92,31 @@ body {
   to   { opacity: 10; }
 }
 #friendslist {
-  background-color: rgb(227, 225, 224);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   margin-top: 20px;
+  border-radius: 3%;
+  border-color: #787575;
+  border-style: double;
+}
+
+#receivedrequest {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  border-radius: 3%;
+  border-color: #787575;
+  border-style: double;
+  margin-left: 0%;
+}
+
+
+#userbox {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  border-radius: 3%;
+  border-color: #898787;
+  border-style: double;
+  margin-right: 9%;
+  width: 20%;
 }
 #username {
   margin-left: auto;

@@ -34,7 +34,7 @@
 
     </div>
 
-      <form id="updateaccount" style="color:rgb(197, 196, 194);"  method="POST" action="/register">
+      <form id="updateaccount" style="color:rgb(197, 196, 194);"  method="POST" action="/update_account">
           {{ form.hidden_tag() }}
           <fieldset class="form-group">
             <legend class="border-bottom mb-4"> Update Account </legend>
@@ -83,7 +83,7 @@
         <div class="form-group">
           {{ form.submit(class= "btn-outline-info") }}
         </div>
-        <a class="ml-2" href= "{{ url_for('login') }} "></a>
+
       </form>
 
 

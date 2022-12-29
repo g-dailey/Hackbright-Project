@@ -44,6 +44,8 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
+  first_name = StringField('First Name', validators=[DataRequired(), Length(min=2, max=20)])
+  last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
   email = StringField('Email', validators=[DataRequired(), Email()])
   picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
   prompt_difficulty_level = RadioField('Prompt Difficulty Level', choices=[(1, 'Easy'), (2, 'Medium'), (3, 'Hard')], validators=[DataRequired()])
