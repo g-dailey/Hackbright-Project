@@ -81,11 +81,9 @@
         {% for approved_request_user in approved_request_users %}
         <div class="col">
         <div class="column">
-
           <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
           <br>
       </div>
-
         </div>
         {% endfor %}
       </div>
@@ -105,12 +103,9 @@
             <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
               Confirm Request
             </button>
-
             <button type="button" onclick="declineRequest({{ paired_user.user_id }})" id="deny_request_btn" class="btn btn-danger">
               Deny Request
             </button>
-
-
           </div>
           <br>
         </div>
@@ -119,18 +114,15 @@
 
     </div>
     <div class="col">
-
     </div>
     <p style="color:rgb(197, 196, 194);" >Here's the list of Programmers you have sent a request to be paired with.</p>
     {% for sent_request_user in sent_request_users %}
     <div class="row">
       <div class="column">
         <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn" type="button" class="btn btn-secondary"> Request Sent </button> <br>
-
           <button type="button" onclick="cancelRequest({{ sent_request_user.user_id }})" id="cancel_request_btn" class="btn btn-light">
             Cancel Request
             </button>
-
         </div>
         <br>
       </div>
@@ -141,11 +133,9 @@
 
     </div>
     <div class="col">
-
     </div>
     <p style="color:rgb(197, 196, 194);">To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
     </div>
-
     </div>
   </div>
 </div>

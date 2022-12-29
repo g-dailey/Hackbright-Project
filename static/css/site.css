@@ -58,10 +58,11 @@ body {
 
 #promptcard {
   background-color:rgba(0, 0, 0, 0.2);
+
 }
 
 #welcomesign {
-  margin-top: 380px;
+  margin-top: 300px;
   margin-left: 350px;
   font-size: 21px;
   /* text-align: center; */
@@ -83,25 +84,27 @@ body {
   margin-top: 20px;
 }
 #username {
-  text-align: right;
+  margin-left: auto;
+  margin-right: 0;
 }
+
 
 #homepagebackground{
   /* Set rules to fill background */
-  min-height: 100%;
+  min-height: 82%;
   min-width: 1030px;
   animation: fadeIn 5s;
 
   /* Set up proportionate scaling */
   width: 100%;
-  height: auto;
+  height: 82%;
 
   /* Set up positioning */
   position:relative;
   background-size:contain, cover;
   background-repeat: no-repeat;
   top: 0;
-  left: 0;
+  left: 15%;
 }
 
 @keyframes fadeIn {
@@ -139,7 +142,7 @@ body {
 
 #updateaccount {
   width: 50%;
-  float: left;
+  float:left;
 }
 
 #profile-image {

@@ -18,6 +18,7 @@ sendgrid_api_key = cred_json["sendggrid_api_key"]
 # print(response.status_code)
 # print(response.body)
 # print(response.headers)
+
 message = Mail(
     from_email='gulafroz.test@gmail.com',
     to_emails='gulafroz.test@gmail.com',
@@ -30,5 +31,5 @@ try:
     print(response.body)
     print(response.headers)
 except Exception as e:
-    print(e.message)
+    print(e)
 

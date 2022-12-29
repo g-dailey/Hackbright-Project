@@ -214,7 +214,7 @@ def login():
       if user and password:
         session['email'] = form.email.data
         user_email = session['email']
-        return redirect(url_for('/home'))
+        return redirect(url_for('home'))
     else:
       flash('Login Failed, please check email and password and try again!', 'danger')
 
@@ -260,8 +260,8 @@ def pairing_cancel(requestee_user_id):
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
 
-  pairing_request_cancel = PairingRequests.query.filter_by(sender_id=requestee_user_id).\
-    filter_by(receiever_id=current_user_id).\
+  pairing_request_cancel = PairingRequests.query.filter_by(sender_id=current_user_id).\
+    filter_by(receiever_id=requestee_user_id).\
     filter_by(pairing_status=PairingStatus.pending).first()
   db.session.delete(pairing_request_cancel)
   db.session.commit()
