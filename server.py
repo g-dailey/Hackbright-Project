@@ -329,7 +329,7 @@ def get_users():
 @app.route('/logout')
 def logout():
 
-  resp = make_response(redirect("/home"))
+  resp = make_response(redirect("/thank-you"))
   resp.set_cookie('session', '')
   return resp
 
