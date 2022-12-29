@@ -34,7 +34,21 @@
 </script>
 
 
+
 <div class="container">
+  <script>
+    VANTA.TRUNK({
+      el: ".your-element-selector",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 30.00,
+      minWidth: 30.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0xcd930c
+    })
+    </script>
   <div class="row">
     <div class="col">
     </div>
@@ -63,25 +77,19 @@
       </div>
     </div>
 
-
     <div class="col" id="friendslist">
-      <style>
-        #friendslist {
-          background-image: url('static/v935-aum-03_2.jpeg');
-        }
-        background-image {
-        -webkit-filter: blur(5px);
-      filter: blur(5px);
-        }
-      </style>
 
     <div class="col">
+      <div class="friendbox">
+
+    </div>
       <div class="friendscontainer">
 
         <div class="card" >Here's the list of Programmers who you have been APPROVED to be paired with.</div>
         {% for approved_request_user in approved_request_users %}
         <div class="col">
         <div class="column">
+          <br>
           <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
           <br>
       </div>

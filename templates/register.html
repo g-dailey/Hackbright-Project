@@ -3,10 +3,12 @@
 {% block content %}
 
 
-
 <h1> Hello! {{name}}</h1>
 
 <div style="color:rgb(197, 196, 194);" class="container">
+<img id = "registerpagebackground" src="static/coder.png">
+
+
   <div id="registerbox" class="content-section">
     <form method="POST" action="/register">
         {{ form.hidden_tag() }}

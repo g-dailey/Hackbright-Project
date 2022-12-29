@@ -50,8 +50,14 @@ body {
 }
 
 #registerbox {
-  width: 50%;
+  width: 40%;
   float: center;
+}
+
+#loginbox {
+  width: 50%;
+  margin-top: 15%;
+  float: right;
 }
 
 #daily_prompt_bar {
@@ -73,10 +79,10 @@ body {
   font-size: 21px;
   /* text-align: center; */
 
-  -webkit-animation: fadein 10s; /* Safari, Chrome and Opera > 12.1 */
-     -moz-animation: fadein 2s; /* Firefox < 16 */
-      -ms-animation: fadein 2s; /* Internet Explorer */
-       -o-animation: fadein 2s; /* Opera < 12.1 */
+  -webkit-animation: fadein 10s;
+     -moz-animation: fadein 2s;
+      -ms-animation: fadein 2s;
+       -o-animation: fadein 2s;
           animation: fadein 2s;
 }
 
@@ -112,6 +118,26 @@ body {
   top: 0;
   left: 10%;
 }
+
+#registerpagebackground{
+  /* Set rules to fill background */
+  min-height: 82%;
+  min-width: 150px;
+  animation: fadeIn 5s;
+
+  /* Set up proportionate scaling */
+  width: 50%;
+  height: 82%;
+
+  /* Set up positioning */
+  position:relative;
+  float: right;
+  background-size:contain, cover;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 5%;
+}
+
 
 @keyframes fadeIn {
   0% { opacity: 0; }
