@@ -17,6 +17,9 @@ from random import choice
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 api_file = "/Users/gedailey/src/hackbright-project/sendgrid_api.json"
 cred_file = open(api_file, 'r')
@@ -29,21 +32,6 @@ bcrypt = Bcrypt(app)
 connect_to_db(app)
 app.secret_key = "DEV"
 
-
-
-# message = Mail(
-#     from_email='gulafroz.test@gmail.com',
-#     to_emails='gulafroz.rezai@gmail.com',
-#     subject='Sending with Twilio SendGrid is Fun',
-#     html_content='<strong>and easy to do anywhere, even with Python</strong>')
-# try:
-#     sg = SendGridAPIClient(os.environ.get(sendgrid_api_key))
-#     response = sg.send(message)
-#     print(response.status_code)
-#     print(response.body)
-#     print(response.headers)
-# except Exception as e:
-#     print(e.message)
 
 animated_gifs = ["https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif",
                 "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
@@ -111,6 +99,23 @@ def register():
         timeslot_id = db_timeslots.timeslot_id)
       db.session.add(time_slot_mapping)
     db.session.commit()
+
+
+
+    message = Mail(
+        from_email='gulafroz.test@gmail.com',
+        to_emails= form.email.data,
+        subject='Thank you for Signing up for Coder Lounge!',
+        html_content='<strong>Hello! We are so happy you are here! Time to connect to fellow Programmers and code problems away!</strong>')
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+
     return redirect(url_for('login'))
   else:
     print(form.errors)
@@ -313,7 +318,7 @@ def update_account():
     logged_in_user.first_name = form.first_name.data
     logged_in_user.last_name = form.last_name.data
     logged_in_user.email = form.email.data
-    # logged_in_user.picture = form.picture.data
+    # logged_in_user.profile_picture = form.profile_picture.data
     logged_in_user.prompt_difficulty_level = form.prompt_difficulty_level.data
     logged_in_user.primary_language = form.primary_language.data
     # logged_in_user.programming_language_label = form.programming_language_label.data
@@ -328,6 +333,12 @@ def update_account():
     # form.picture.data = logged_in_user.picture
     form.prompt_difficulty_level.data = logged_in_user.prompt_difficulty_level
     form.primary_language.data = logged_in_user.primary_language
+    # for language in form.programming_language_label.data:
+    #   db_language = ProgrammingLanguage.query.filter(ProgrammingLanguage.programming_language_label == language).first()
+    #   prog_lang_mapping = UserProgrammingLanguageMapping(
+    #     user_id = logged_in_user.user_id,
+    #     programming_language_id = db_language.programming_language_id)
+      # db.session.add(prog_lang_mapping)
     # form.programming_language_label.data = logged_in_user.programming_language_label
     form.timezone_name.data = logged_in_user.timezone_name
 
