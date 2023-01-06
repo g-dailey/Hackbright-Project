@@ -33,8 +33,6 @@
   }
 </script>
 
-
-
 <div class="container">
   <script>
     VANTA.TRUNK({
@@ -42,11 +40,12 @@
       mouseControls: true,
       touchControls: true,
       gyroControls: false,
-      minHeight: 30.00,
-      minWidth: 30.00,
+      minHeight: 200.00,
+      minWidth: 200.00,
       scale: 1.00,
       scaleMobile: 1.00,
-      color: 0xcd930c
+      color: 0x2f2d2d,
+      chaos: 2.00
     })
     </script>
   <div class="row">
@@ -90,7 +89,7 @@
         <div class="col">
         <div class="column">
           <br>
-          <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br>{{approved_request_user.email}}</div>
+          <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br> <small class="text-muted">{{approved_request_user.email}}</small></div>
           <br>
       </div>
         </div>
@@ -110,7 +109,8 @@
           <div class="card">
             {{paired_user.first_name}} {{paired_user.last_name}}
             <br>
-            {{paired_user.email}}
+            <small class="text-muted">{{paired_user.email}}</small>
+
             <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
               Confirm Request
             </button>
@@ -133,7 +133,7 @@
 
     <div class="row">
       <div class="column">
-        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br>{{sent_request_user.email}} <button onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn" type="button" class="btn btn-secondary"> Request Sent </button> <br>
+        <div class="card"> {{sent_request_user.first_name}} {{sent_request_user.last_name}} <br><small class="text-muted">{{sent_request_user.email}}</small> <button onclick= "alert('This request is pending approval of the programmer!')" id="request_sent_btn" type="button" class="btn btn-secondary"> Request Sent </button> <br>
           <button type="button" onclick="cancelRequest({{ sent_request_user.user_id }})" id="cancel_request_btn" class="btn btn-light">
             Cancel Request
             </button>

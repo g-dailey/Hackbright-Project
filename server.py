@@ -51,7 +51,6 @@ animated_gifs = ["https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif",
 @app.route("/home", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def home():
-  #https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif
   all_users = User.query.all()
   user_email=session.get('email', None)
   all_prompts = Prompt.query.all()
@@ -70,8 +69,6 @@ def register():
     print('***** This is working')
     # bcrypt = Bcrypt(app)
     # hashed_password = bcrypt.generate_password_hash(password=form.password.data).decode('utf-8')
-
-
     user = User(email=form.email.data,
                 password=form.password.data,
                 first_name=form.first_name.data,
@@ -100,13 +97,12 @@ def register():
       db.session.add(time_slot_mapping)
     db.session.commit()
 
-
-
     message = Mail(
         from_email='gulafroz.test@gmail.com',
         to_emails= form.email.data,
         subject='Thank you for Signing up for Coder Lounge!',
-        html_content='<strong>Hello! We are so happy you are here! Time to connect to fellow Programmers and code problems away!</strong>')
+        html_content='<strong> Hello! We are so happy you are here! </strong> \
+        <p> Time to connect to fellow Programmers and code problems away! </p>')
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
