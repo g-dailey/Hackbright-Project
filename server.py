@@ -342,6 +342,21 @@ def update_account():
 
   return render_template('update_account.html', logged_in_user=logged_in_user, form=form, profile_picture=profile_picture)
 
+@app.route("/dailyprompt", methods=['GET', 'POST'])
+def dailyprompt():
+
+  user_email=session.get('email', None)
+  logged_in_user = User.query.filter_by(email= user_email).first()
+  current_user_id = logged_in_user.user_id
+
+  all_prompts = Prompt.query.all()
+
+  for prompt in all_prompts:
+    random_prompt_link, random_prompt_name = prompt.prompt_link, prompt.prompt_name
+
+  return render_template('dailyprompt.html', logged_in_user=logged_in_user, all_prompts=all_prompts)
+
+
 @app.route('/home/users')
 def get_users():
 

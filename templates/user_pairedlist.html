@@ -4,11 +4,16 @@
 
 
 <br>
-  <div>{% if test_user %}
+
+<div class="userpairedlistepage">
+  <div>
+
+      {% if test_user %}
     <h1 style="color:rgb(197, 196, 194);" >Thank you for sending a request!</h1>
     <p style="color:rgb(197, 196, 194);" >Here's the list of Programmers you have sent a request to be paired with.</p>
   {% else %}
-  <h1 style="color:rgb(197, 196, 194);" class="content-section">Welcome to the Coder Lounge!</h1>
+  <h5 style="color:rgb(197, 196, 194);" class="content-section"> These awesome Programmers are the exact match with your programming language preference, availability and primary language.</h5>
+    <h5 style="color:rgb(197, 196, 194);" class="content-section">Please send request to be connected!</h5>
   {% endif %}
 </div>
 
@@ -50,7 +55,7 @@
 
         <form  action="/pair_request" method="POST">
         <input type="hidden" id="user_email" name="user_email" value="{{ user.email }}">
-        <input class="btn btn-info" value="Send Request" type="submit" />
+        <input class="btn btn-light" value="Send Request" type="submit" />
       </form>
 
        </TD>
@@ -60,17 +65,15 @@
 
 </TR>
 
-</body>
-</html>
+</div>
+
+
 
 
 {% endfor %}
 
 
 
-<br>
-
-<label> Please enter the email of the Programmer you would like to connect with!</label>
 
 <br>
 

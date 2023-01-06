@@ -122,22 +122,27 @@ class PairingRequests(db.Model):
     def __repr__(self):
         return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
 
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(140))
+    body = db.Column(db.String(2000))
+    the_prompt_id = db.Column(db.Integer, db.ForeignKey('prompts.prompt_id'))
+    comments = db.relationship('Comment', backref='title', lazy='dynamic')
 
-# class Pairing(db.Model):
-#     """Pairing"""
+    # def get_comments(self):
+    #     return Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp.desc())
 
-#     __tablename__ = "pairings_sessions"
 
-#     pairing_id = db.Column(db.Integer, autoincrement = True, primary_key= True)
-#     user_one_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-#     user_two_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-#     # meeting_date = db.Column(db.Datetime, nullable=False) #is there a datetime option?
-#     feedback_description = db.Column(db.Text)
-#     is_prompt_solved = db.Column(db.Boolean)
-#     prompt_id = db.Column(db.Integer, db.ForeignKey("prompts.prompt_id"))
+    def __repr__(self):
+        return '<Post %r>' % (self.body)
 
-#     def __repr__(self):
-#             return f"<Pairing pairing_id={self.pairing_id} >" #am I am able to print the foreign key values here?
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.String(140))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    def __repr__(self):
+        return '<Post %r>' % (self.body)
 
 class Prompt(db.Model):
     """Prompt"""
@@ -182,13 +187,6 @@ def populate_prompt_tb():
             db.session.commit()
 
 user_filename = 'User-data.csv'
-
-# Notifications Tables (ID, recipient, sender, message)
-# Handing request (if request accepted, already paired)
-# Table for rejected requests (to dismiss or have it display differently)
-# User profile: User being able to check other user’s
-
-
 
 def populate_user_tb():
 

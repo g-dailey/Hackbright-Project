@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container">
+  <script>
+    VANTA.TRUNK({
+      el: ".your-element-selector",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x2f2d2d,
+      chaos: 2.00
+    })
+    </script>
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="row">
+      <div id="promptbox" class="col">
+        <div class ="user-profile">
+          <h4 style="color:rgb(197, 196, 194);">Welcome to the Challenge of the Day!</h4>
+          <br>
+          <h5 style="color:rgb(197, 196, 194);">Please take 30 minutes to solve the following prompt and share your answer with explanation in the comments!</h5>
+          <p class="c2"><a href= "{{ (all_prompts | random).prompt_link }}"> {{ (all_prompts | random).prompt_name }}</a></p>
+        <div class ="content-section">
+
+        </div>
+      </div>
+
+
+  <div class="row">
+    <div class="">
+    <div class="col">
+
+    </div>
+      <div class="row">
+        <div class="column">
+
+          <br>
+        </div>
+      </div>
+      </div>
+
+
+    </div>
+    <div>
+</div>
+
+{% endblock content %}

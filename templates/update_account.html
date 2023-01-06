@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class="container">
+
   <div class="row">
     <div class="col">
     </div>
@@ -44,9 +45,11 @@
 
 
             <div class="form-group">
+              <div class="prompt-ul-list">
               {{ form.prompt_difficulty_level.label(class="form-control-label") }}
               {{ form.prompt_difficulty_level }}
             </div>
+          </div>
 
             <div class="form-group">
               {{ form.primary_language.label(class="form-control-label") }}
@@ -54,6 +57,8 @@
             </div>
 
             <div class="form-group"></div>
+            <br>
+            <p> To make multiple selections, please click hold onto SHIFT button and click on your selections!</p>
               {{ form.programming_language_label.label(class="form-control-label") }}
             </div>
               {{ form.programming_language_label(size=5, class="form-control form-control-lg", multiple=True) }}
@@ -65,11 +70,14 @@
               {{ form.timezone_name(size=5, class="form-control form-control-lg") }}
 
                 <div class="form-group">
+                  <br>
+                  <p> To make multiple selections, please click hold onto SHIFT button and click on your selections!</p>
                   {{ form.timeslot_label.label(class="form-control-label") }}
                 </div>
                   {{ form.timeslot_label(size=5, class="form-control form-control-lg", multiple=True) }}
 
         </fieldset>
+        <br>
         <div class="form-group">
           {{ form.submit(class= "btn-outline-info") }}
         </div>
@@ -78,7 +86,9 @@
 
 
 </div>
+
 </div>
+
 </div>
 
 {% endblock content %}
