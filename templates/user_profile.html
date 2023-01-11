@@ -84,7 +84,7 @@
     </div>
       <div class="friendscontainer">
 
-        <div class="card" >Here's the list of Programmers who you have been APPROVED to be paired with.</div>
+        <p style="color:rgb(197, 196, 194);">Programmers who you have been APPROVED to be paired with.</p>
         {% for approved_request_user in approved_request_users %}
         <div class="col">
         <div class="column">
@@ -98,9 +98,47 @@
     </div>
   </div>
 
+
+
+
+
+      </div>
+
+      <div class="col" id="friendslist">
+
+      <div class="col">
+        <div class="friendbox">
+
+      </div>
+
+        <div class="friendscontainer">
+
+          <p style="color:rgb(197, 196, 194);">Programmers who you have been APPROVED to be paired with.</p>
+
+          <div class="col">
+          </div>
+
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
   <div class="row">
     <div class="">
     <div class="col">
+      <br>
       <p style="color:rgb(197, 196, 194);" >Here's the list of Programmers you have received a request to be paired with.</p>
       {% for paired_user in received_request_users %}
     </div>
@@ -114,6 +152,7 @@
             <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
               Confirm Request
             </button>
+            <br>
             <button type="button" onclick="declineRequest({{ paired_user.user_id }})" id="deny_request_btn" class="btn btn-danger">
               Deny Request
             </button>
@@ -128,6 +167,7 @@
     <div>
     <div id= "receivedrequest" class="col">
 
+    <br>
     <p style="color:rgb(197, 196, 194);" >Here's the list of Programmers you have sent a request to be paired with.</p>
     {% for sent_request_user in sent_request_users %}
 

@@ -7,7 +7,7 @@ import pandas as pd
 from flask_login import current_user
 import csv
 import pytz
-from flask_login import current_user
+
 
 user_filename = 'User-data.csv'
 # from flask_login import login_user, current_user, logout_user, login_required
@@ -58,8 +58,13 @@ class UpdateAccountForm(FlaskForm):
   timeslot_label = SelectMultipleField('Time Slots', choices=[('7am', '7am - 10am'), ('10am', '10am - 1pm'), ('1pm', '1pm - 4pm'), ('4pm', '4pm - 7pm'), ('7pm', '7pm - 10pm'), ('10pm', '10pm - 12am')], validators=[DataRequired()]) #how to make this a multiple select field and still exist in this form?
   submit = SubmitField('Update')
 
-  def validate_email(self, email):
-    if email.data != current_user.email:
-      user = User.query.filter_by(email=email.data).first()
-      if user:
-        raise ValidationError('That email is taken, please choose a different one.')
+  # def validate_email(self, email):
+  #   print(current_user.email + '$$$$$$$$$$$' + email.data)
+  #   if email.data != current_user.email:
+  #     user = User.query.filter_by(email=email.data).first()
+  #     if user:
+  #       raise ValidationError('That email is taken, please choose a different one.')
+
+class CommentForm(FlaskForm):
+  body = StringField('Please Type Comment Here:', validators=[DataRequired(), Length(min=2, max=200000)])
+  submit = SubmitField('Comment')

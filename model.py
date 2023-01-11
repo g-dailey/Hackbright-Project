@@ -17,6 +17,26 @@ from sqlalchemy import Integer, Enum
 db = SQLAlchemy()
 
 
+def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
+    flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+    flask_app.config["SQLALCHEMY_ECHO"] = True
+    flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    bcrypt = Bcrypt(flask_app)
+    # login_manager = LoginManager(flask_app)
+    db.app = flask_app
+
+
+    db.init_app(flask_app)
+
+
+
+    print("You have been connected to the db")
+
+
+
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 class User(db.Model):
 
     __tablename__ = "users"
@@ -122,24 +142,27 @@ class PairingRequests(db.Model):
     def __repr__(self):
         return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(140))
-    body = db.Column(db.String(2000))
-    the_prompt_id = db.Column(db.Integer, db.ForeignKey('prompts.prompt_id'))
-    comments = db.relationship('Comment', backref='title', lazy='dynamic')
+# class Post(db.Model):
+#     id = db.Column(db.Integer, primary_key = True)
+#     title = db.Column(db.String(140))
+#     body = db.Column(db.String(2000))
+#     the_prompt_id = db.Column(db.Integer, db.ForeignKey('prompts.prompt_id'))
+#     comments = db.relationship('Comment', backref='title', lazy='dynamic')
 
     # def get_comments(self):
     #     return Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp.desc())
 
 
-    def __repr__(self):
-        return '<Post %r>' % (self.body)
+#     def __repr__(self):
+#         return '<Post %r>' % (self.body)
 
 class Comment(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    body = db.Column(db.String(140))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    """Comment"""
+    __tablename__ = "comments"
+    com_id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.String(200000))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('prompts.prompt_id'))
 
     def __repr__(self):
         return '<Post %r>' % (self.body)
@@ -159,19 +182,6 @@ class Prompt(db.Model):
     def __repr__(self):
             return f"<Prompt prompt_id={self.prompt_id} prompt_name={self.prompt_name} prompt_link={self.prompt_link} prompt_difficulty={self.prompt_difficulty}>"
 
-def connect_to_db(flask_app, db_uri="postgresql:///coder-lounge", echo=True):
-    flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
-    flask_app.config["SQLALCHEMY_ECHO"] = True
-    flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    bcrypt = Bcrypt(flask_app)
-    db.app = flask_app
-
-
-    db.init_app(flask_app)
-
-
-
-    print("You have been connected to the db")
 
 prompt_filename = 'Leetcode-data - leetcode.csv'
 

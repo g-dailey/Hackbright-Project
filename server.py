@@ -5,15 +5,16 @@ from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from model import User, TimeSlot, UserTimeSlotMapping, ProgrammingLanguage, UserProgrammingLanguageMapping, Prompt, \
-  PairingRequests, connect_to_db, db, PairingStatus
+  PairingRequests, connect_to_db, db, PairingStatus, Comment
 import jinja2
-from forms import SignUpForm, LoginForm, UpdateAccountForm
+from forms import SignUpForm, LoginForm, UpdateAccountForm, CommentForm
 import json
 from flask_bcrypt import Bcrypt
 import requests
 from flask import make_response
 from flask_login import login_user, current_user, logout_user
 from random import choice
+import random
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -55,6 +56,7 @@ def home():
   user_email=session.get('email', None)
   all_prompts = Prompt.query.all()
   gifs = animated_gifs
+  all_prompts = Prompt.query.all()
 
   for user in all_users:
     logged_in_user = User.query.filter_by(email= user_email).first()
@@ -309,19 +311,57 @@ def update_account():
   user_email=session.get('email', None)
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
+  saved_password = logged_in_user.password
 
-  if form.validate_on_submit():
+  if request.method == 'POST':
     logged_in_user.first_name = form.first_name.data
     logged_in_user.last_name = form.last_name.data
-    logged_in_user.email = form.email.data
+    # logged_in_user.email = form.email.data
     # logged_in_user.profile_picture = form.profile_picture.data
     logged_in_user.prompt_difficulty_level = form.prompt_difficulty_level.data
     logged_in_user.primary_language = form.primary_language.data
     # logged_in_user.programming_language_label = form.programming_language_label.data
     logged_in_user.timezone_name = form.timezone_name.data
-    db.session.commmit()
+    User.query.filter(User.user_id == current_user_id).update({"first_name": logged_in_user.first_name,
+                                                    "last_name": logged_in_user.last_name,
+                                                    "prompt_difficulty_level": logged_in_user.prompt_difficulty_level,
+                                                    "primary_language": logged_in_user.primary_language,
+                                                    "timezone_name": logged_in_user.timezone_name
+                                                    },
+                                                   synchronize_session=False)
+
+
+    program_to_delete = UserProgrammingLanguageMapping.query.filter_by(user_id = current_user_id).all()
+    for i in program_to_delete:
+
+      db.session.delete(i)
+      # db.session.commit()
+
+    for language in form.programming_language_label.data:
+        db_language = ProgrammingLanguage.query.filter(ProgrammingLanguage.programming_language_label == language).first()
+        prog_lang_mapping = UserProgrammingLanguageMapping(
+          user_id = logged_in_user.user_id,
+          programming_language_id = db_language.programming_language_id)
+        db.session.add(prog_lang_mapping)
+    db.session.commit()
+
+    time_delete = UserTimeSlotMapping.query.filter_by(user_id = current_user_id).all()
+    for i in time_delete:
+      db.session.delete(i)
+
+    for time in form.timeslot_label.data:
+        db_time = TimeSlot.query.filter(TimeSlot.timeslot_label == time).first()
+        time_mapping = UserTimeSlotMapping(
+          user_id = logged_in_user.user_id,
+          timeslot_id = db_time.timeslot_id)
+        db.session.add(time_mapping)
+    db.session.commit()
+
+
+
     flash('Your account has been updated!', 'success')
-    return redirect(url_for('update_account'))
+
+    return redirect('/profile')
   elif request.method == 'GET':
     form.first_name.data = logged_in_user.first_name
     form.last_name.data = logged_in_user.last_name
@@ -345,16 +385,29 @@ def update_account():
 @app.route("/dailyprompt", methods=['GET', 'POST'])
 def dailyprompt():
 
+  form = CommentForm()
+
   user_email=session.get('email', None)
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
 
   all_prompts = Prompt.query.all()
+  random_prompt = random.choice(all_prompts)
+  prompt_id = random_prompt.prompt_id
 
-  for prompt in all_prompts:
-    random_prompt_link, random_prompt_name = prompt.prompt_link, prompt.prompt_name
+  if form.validate_on_submit():
+    comment = Comment(body = form.body.data,
+                      user_id = current_user_id,
+                      post_id = prompt_id )
+    db.session.add(comment)
+    db.session.commit()
 
-  return render_template('dailyprompt.html', logged_in_user=logged_in_user, all_prompts=all_prompts)
+  all_comments = Comment.query.filter_by(post_id = prompt_id)
+
+  # for prompt in all_prompts:
+  #   random_prompt_link, random_prompt_name = prompt.prompt_link, prompt.prompt_name
+
+  return render_template('dailyprompt.html', logged_in_user=logged_in_user, random_prompt=random_prompt, all_prompts=all_prompts, form=form, all_comments = all_comments)
 
 
 @app.route('/home/users')

@@ -2,7 +2,7 @@
 
 
 body {
-  background: rgb(62, 51, 38);
+  background: rgb(15, 12, 9);
   font-family: "Quicksand";
   /* background: rgb(27, 31, 28); */
 
@@ -55,6 +55,15 @@ body {
 
 .prompt-ul-list > * {
   list-style: none;
+}
+
+.form-control {
+  background-color: rgb(226, 213, 187);
+
+}
+#commentbox {
+  width: 90%;
+  margin-left: 1%;
 }
 
 #registerbox {
