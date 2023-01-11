@@ -421,6 +421,8 @@ def dailyprompt():
 
   all_comments = Comment.query.filter_by(post_id = prompt_id)
 
+
+
   # for prompt in all_prompts:
   #   random_prompt_link, random_prompt_name = prompt.prompt_link, prompt.prompt_name
 

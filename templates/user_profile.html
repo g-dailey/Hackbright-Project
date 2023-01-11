@@ -89,7 +89,7 @@
         <div class="col">
         <div class="column">
           <br>
-          <div  class="card"> {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br> <small class="text-muted">{{approved_request_user.email}}</small></div>
+          <div  class="card"> <img style="border-radius:50%;" src="static/profile_pics/{{ logged_in_user.profile_picture | default('static/profile_pics/default-image.jpeg') }}">  {{approved_request_user.first_name}} {{approved_request_user.last_name}} <br> <small class="text-muted">Connected</small></div>
           <br>
       </div>
         </div>
@@ -97,10 +97,6 @@
       </div>
     </div>
   </div>
-
-
-
-
 
       </div>
 
@@ -112,7 +108,7 @@
       </div>
 
         <div class="">
-
+          <br>
           <p style="color:rgb(197, 196, 194);">Here's the list of Programmers you have received a request to be paired with.</p>
           {% for paired_user in received_request_users %}
         </div>
@@ -141,19 +137,6 @@
       <br>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
     <div>
     <div id= "receivedrequest" class="col">
@@ -178,5 +161,7 @@
     <br>
     {% endfor %}
   </div>
+
+
 
 {% endblock content %}

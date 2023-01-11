@@ -20,57 +20,69 @@
     </script>
   <div class="row">
     <div class="col">
-    <div class="row">
-      <div id="promptbox" class="col">
-        <div class ="user-profile" style="width: 97%">
-          <h4 style="color:rgb(197, 196, 194);">Welcome to the Challenge of the Day!</h4>
-          <br>
-          <h5 style="color:rgb(197, 196, 194);">Please take 30 minutes to solve the following prompt and share your answer with explanation in the comments!</h5>
-          <p class="c2"><a href= "{{ random_prompt.prompt_link }}"> {{ random_prompt.prompt_name }}</a></p>
-        <div class ="content-section">
+      <div class="row">
+        <div id="promptbox" class="col">
+          <div class ="user-profile" style="width: 97%">
+            <h4 style="color:rgb(197, 196, 194);">Welcome to the Challenge of the Day!</h4>
+            <br>
+            <h5 style="color:rgb(197, 196, 194);">Please take 30 minutes to solve the following prompt and share your answer with explanation in the comments!</h5>
+            <p class="c2"><a href= "{{ random_prompt.prompt_link }}"> {{ random_prompt.prompt_name }}</a></p>
+        </div>
+    </div>
+    </div>
+  </div>
+  </div>
+
+
+  {% for comment in all_comments %}
+  {% if comment %}
+
+
+  <div class="col">
+    <div class="row"class="row">
+      <div style="background-color: rgb(97, 91, 89);" id="promptbox" class="col">
+        <div class ="comments-section" >
+
+        <p style="color:rgb(197, 196, 194); "> {{comment.body}}</p>
+
         </div>
       </div>
     </div>
+  </div>
+
+
+
+
+  {% endif %}
+
+  {% endfor %}
+
+  <div style="color:rgb(197, 196, 194);" class="container">
+
+    <div id="commentbox" class="content-section">
+      <form method="POST" action="/dailyprompt">
+          {{ form.hidden_tag() }}
+          <br>
+
+          <fieldset class="form-group">
+            <div class="form-group" >
+              <br>
+              {{ form.body.label(class="form-control-label") }}
+              <br>
+              {{ form.body(size=5, class="form-control form-control-lg") }}
+              <br>
+
+            </div>
+
+            <div class="form-group">
+
+              {{ form.submit(class= "btn-outline-info") }}
+            </div>
+          </fieldset>
+        </form>
+
     </div>
+  </div>
 </div>
-{% for comment in all_comments %}
-{% if comment %}
-
-<div >
-  <div class="col">
-  <div class="row"class="row">
-    <div style="background-color: rgb(42, 39, 38);" id="promptbox" class="col">
-      <div class ="user-profile" >
-
-  <p style="color:rgb(197, 196, 194); "> {{comment.body}}</p>
-</div>
-<div class ="content-section">
-</div>
-</div>
-</div>
-{% endif %}
-
-{% endfor %}
-
-<div style="color:rgb(197, 196, 194);" class="container">
-
-  <div id="commentbox" class="content-section">
-    <form method="POST" action="/dailyprompt">
-        {{ form.hidden_tag() }}
-        <br>
-        <fieldset class="form-group">
-          <div class="form-group" >
-            <br>
-            {{ form.body.label(class="form-control-label") }}
-            <br>
-            {{ form.body(size=5, class="form-control form-control-lg") }}
-            <br>
-
-          </div>
-
-          <div class="form-group">
-            <br>
-            {{ form.submit(class= "btn-outline-info") }}
-          </div>
 
 {% endblock content %}

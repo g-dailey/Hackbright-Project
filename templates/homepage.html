@@ -4,21 +4,19 @@
 
 
 <script>
-  VANTA.NET({
-    el: ".your-element-selector",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    scale: 1.00,
-    scaleMobile: 1.00,
-    color: 0xa76d07,
-    backgroundColor: 0x160e04,
-    points: 12.00,
-    maxDistance: 28.00,
-    spacing: 18.00
-  })
+// VANTA.NET({
+//   el: ".your-element-selector",
+//   mouseControls: true,
+//   touchControls: true,
+//   gyroControls: false,
+//   minHeight: 200.00,
+//   minWidth: 200.00,
+//   scale: 1.00,
+//   scaleMobile: 1.00,
+//   color: 0x4d3e33,
+//   backgroundColor: 0x222222,
+//   points: 9.00
+// })
   </script>
 
 
@@ -35,9 +33,10 @@
           <h5 >Why should I practice leetcode style problems? </h5>
           <p> "Leetcode-style problems have many benefits aside from the technical learnings they can provide.
             These types of problems tend to force developers into choosing one among many different paths of implementation.
-            These are great practice for learning new algorithms, data structures, and approaches to solving problems." Reference: cult.honepot.io </p>
-         <div id="promptcard" class="card"> <p>Prompt of the right this moment: </p>
-          <a href= "{{ (all_prompts | random).prompt_link }}"> Leetcode Problem: {{ (all_prompts | random).prompt_name }}</a> </div>
+            These are great practice for learning new algorithms, data structures, and approaches to solving problems.
+            <br>So, let's just get started and code problems away!!" Reference: cult.honepot.io </p>
+         <div id="promptcard" >
+          <a href= ""> </a> </div>
           <img src="{{gifs | random }}">
         </div>
       </div>
