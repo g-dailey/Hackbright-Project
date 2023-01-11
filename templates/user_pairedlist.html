@@ -27,15 +27,15 @@
         <div  class="card"> <img style="border-radius:50%; width: 30%; height: 30%;" src="static/profile_pics/{{ user.profile_picture | default('static/profile_pics/default-image.jpeg') }}">
 
         {{user.first_name}} {{user.last_name}}
-        <br>
-        <small class="text-muted">{{user.email}}</small>
+
         {% for lang in user.programming_languages %}
-        <small class="text-muted">{{ lang.programming_language_name }}, &nbsp;</small>
+        <small class="text-muted"> Programming in: {{ lang.programming_language_name }}, &nbsp;</small>
         {% endfor %}
 
         {% for timings in user.selected_timeslots %}
-        <small class="text-muted">{{ timings.timeslot_name }}, &nbsp;</small>
+        <small class="text-muted">Availablt at: {{ timings.timeslot_name }}, &nbsp;</small>
         {% endfor %}
+        <br>
 
 
           <input type="hidden" id="user_email" name="user_email" value="{{ user.email }}">
