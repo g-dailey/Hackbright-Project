@@ -142,20 +142,6 @@ class PairingRequests(db.Model):
     def __repr__(self):
         return f'< User Pairing Request pairing_list_id={self.pairing_list_id} sender_id={self.sender_id} receiever_id={self.receiever_id}>'
 
-# class Post(db.Model):
-#     id = db.Column(db.Integer, primary_key = True)
-#     title = db.Column(db.String(140))
-#     body = db.Column(db.String(2000))
-#     the_prompt_id = db.Column(db.Integer, db.ForeignKey('prompts.prompt_id'))
-#     comments = db.relationship('Comment', backref='title', lazy='dynamic')
-
-    # def get_comments(self):
-    #     return Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp.desc())
-
-
-#     def __repr__(self):
-#         return '<Post %r>' % (self.body)
-
 class Comment(db.Model):
     """Comment"""
     __tablename__ = "comments"

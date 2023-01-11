@@ -35,18 +35,18 @@
 
 <div class="container">
   <script>
-    VANTA.TRUNK({
-      el: ".your-element-selector",
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      scale: 1.00,
-      scaleMobile: 1.00,
-      color: 0x2f2d2d,
-      chaos: 2.00
-    })
+    // VANTA.TRUNK({
+    //   el: ".your-element-selector",
+    //   mouseControls: true,
+    //   touchControls: true,
+    //   gyroControls: false,
+    //   minHeight: 200.00,
+    //   minWidth: 200.00,
+    //   scale: 1.00,
+    //   scaleMobile: 1.00,
+    //   color: 0x2f2d2d,
+    //   chaos: 2.00
+    // })
     </script>
   <div class="row">
     <div class="col">
@@ -104,17 +104,33 @@
 
       </div>
 
-      <div class="col" id="friendslist">
+      <div class="col" id="friendrequests">
 
       <div class="col">
-        <div class="friendbox">
+        <div class="">
 
       </div>
 
-        <div class="friendscontainer">
+        <div class="">
 
-          <p style="color:rgb(197, 196, 194);">Programmers who you have been APPROVED to be paired with.</p>
+          <p style="color:rgb(197, 196, 194);">Here's the list of Programmers you have received a request to be paired with.</p>
+          {% for paired_user in received_request_users %}
+        </div>
+          <div class="row">
+            <div class="column">
+              <div class="card">
+                {{paired_user.first_name}} {{paired_user.last_name}}
+                <br>
+                <small class="text-muted">{{paired_user.email}}</small>
 
+                <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
+                  Confirm Request
+                </button>
+                <br>
+                <button type="button" onclick="declineRequest({{ paired_user.user_id }})" id="deny_request_btn" class="btn btn-danger">
+                  Deny Request
+                </button>
+                {% endfor %}
           <div class="col">
           </div>
 
@@ -122,46 +138,21 @@
 
         </div>
       </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="row">
-    <div class="">
-    <div class="col">
       <br>
-      <p style="color:rgb(197, 196, 194);" >Here's the list of Programmers you have received a request to be paired with.</p>
-      {% for paired_user in received_request_users %}
     </div>
-      <div class="row">
-        <div class="column">
-          <div class="card">
-            {{paired_user.first_name}} {{paired_user.last_name}}
-            <br>
-            <small class="text-muted">{{paired_user.email}}</small>
 
-            <button type="button" onclick="confirmRequest({{ paired_user.user_id }})" id="confirm_request_btn" class="btn btn-primary">
-              Confirm Request
-            </button>
-            <br>
-            <button type="button" onclick="declineRequest({{ paired_user.user_id }})" id="deny_request_btn" class="btn btn-danger">
-              Deny Request
-            </button>
-          </div>
-          <br>
-        </div>
-      </div>
-      </div>
-      {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
 
     </div>
     <div>
@@ -169,6 +160,8 @@
 
     <br>
     <p style="color:rgb(197, 196, 194);" >Here's the list of Programmers you have sent a request to be paired with.</p>
+    <p style="color:rgb(197, 196, 194);">To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
+
     {% for sent_request_user in sent_request_users %}
 
     <div class="row">
@@ -180,18 +173,10 @@
         </div>
         <br>
       </div>
+      <br>
     </div>
+    <br>
     {% endfor %}
   </div>
-
-
-    </div>
-    <div class="col">
-    </div>
-    <p style="color:rgb(197, 196, 194);">To pair with more Programmers, checkout the list of Programmers <a href="\pairedlist"> HERE! </a></p>
-    </div>
-    </div>
-
-</div>
 
 {% endblock content %}

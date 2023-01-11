@@ -229,13 +229,30 @@ def pairing_confirm(requestee_user_id):
   user_email=session.get('email', None)
   logged_in_user = User.query.filter_by(email= user_email).first()
   current_user_id = logged_in_user.user_id
+  current_user_email = logged_in_user.email
 
   pairing_request = PairingRequests.query.filter_by(sender_id=requestee_user_id).\
     filter_by(receiever_id=current_user_id).\
     filter_by(pairing_status=PairingStatus.pending).first()
 
   pairing_request.pairing_status = PairingStatus.approved
+
   db.session.commit()
+
+  message = Mail(
+      from_email='gulafroz.test@gmail.com',
+      to_emails= current_user_email,
+      subject='Thank you for Signing up for Coder Lounge!',
+      html_content='<strong> Hello! We are so happy you are here! </strong> \
+      <p> Time to connect to fellow Programmers and code problems away! </p>')
+  try:
+      sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+      response = sg.send(message)
+      print(response.status_code)
+      print(response.body)
+      print(response.headers)
+  except Exception as e:
+      print(e.message)
 
   return redirect('/profile')
 

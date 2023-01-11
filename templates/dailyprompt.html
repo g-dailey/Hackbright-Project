@@ -22,7 +22,7 @@
     <div class="col">
     <div class="row">
       <div id="promptbox" class="col">
-        <div class ="user-profile">
+        <div class ="user-profile" style="width: 97%">
           <h4 style="color:rgb(197, 196, 194);">Welcome to the Challenge of the Day!</h4>
           <br>
           <h5 style="color:rgb(197, 196, 194);">Please take 30 minutes to solve the following prompt and share your answer with explanation in the comments!</h5>
@@ -36,13 +36,13 @@
 {% for comment in all_comments %}
 {% if comment %}
 
-<div class="row">
+<div >
   <div class="col">
-  <div class="row">
-    <div id="promptbox" class="col">
-      <div class ="user-profile">
+  <div class="row"class="row">
+    <div style="background-color: rgb(42, 39, 38);" id="promptbox" class="col">
+      <div class ="user-profile" >
 
-  <p style="color:rgb(197, 196, 194);"> {{comment.body}}</p>
+  <p style="color:rgb(197, 196, 194); "> {{comment.body}}</p>
 </div>
 <div class ="content-section">
 </div>
@@ -59,12 +59,13 @@
         {{ form.hidden_tag() }}
         <br>
         <fieldset class="form-group">
-          <div class="form-group">
+          <div class="form-group" >
             <br>
             {{ form.body.label(class="form-control-label") }}
             <br>
+            {{ form.body(size=5, class="form-control form-control-lg") }}
             <br>
-            {{ form.body(class="form-control form-control-lg") }}
+
           </div>
 
           <div class="form-group">
