@@ -35,26 +35,29 @@
 
 
   {% for comment in all_comments %}
-  {% if comment %}
 
+  {% for user in commented_users %}
+  {% if comment %}
+  {% if comment.user_id == user.user_id %}
 
   <div class="col">
     <div class="row"class="row">
       <div style="background-color: rgb(97, 91, 89);" id="promptbox" class="col">
         <div class ="comments-section" >
-
-        <p style="color:rgb(197, 196, 194); "> {{comment.body}}</p>
+          <img style="border-radius:50%; width: 4%; height: 25%;" src="static/profile_pics/{{ logged_in_user.profile_picture | default('static/profile_pics/default-image.jpeg') }}">
+       <small>{{ user.first_name }} {{ user.last_name }} Commented:</small><br>
+       <br>
+       <p style="color:rgb(197, 196, 194); ">  {{comment.body}}</p>
 
         </div>
       </div>
     </div>
   </div>
 
-
-
-
+  {% endif %}
   {% endif %}
 
+  {% endfor %}
   {% endfor %}
 
   <div style="color:rgb(197, 196, 194);" class="container">

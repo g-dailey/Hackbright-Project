@@ -245,14 +245,14 @@ def pairing_confirm(requestee_user_id):
       subject='Thank you for Signing up for Coder Lounge!',
       html_content='<strong> Hello! We are so happy you are here! </strong> \
       <p> Time to connect to fellow Programmers and code problems away! </p>')
-  try:
-      sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-      response = sg.send(message)
-      print(response.status_code)
-      print(response.body)
-      print(response.headers)
-  except Exception as e:
-      print(e.message)
+  # try:
+  #     sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+  #     response = sg.send(message)
+  #     print(response.status_code)
+  #     print(response.body)
+  #     print(response.headers)
+  # except Exception as e:
+
 
   return redirect('/profile')
 
@@ -421,12 +421,17 @@ def dailyprompt():
 
   all_comments = Comment.query.filter_by(post_id = prompt_id)
 
+  commented_users_id = []
+  for comment in all_comments:
+    commented_users_id.append(comment.user_id)
+
+  commented_users = User.query.filter(User.user_id.in_(commented_users_id)).all()
 
 
   # for prompt in all_prompts:
   #   random_prompt_link, random_prompt_name = prompt.prompt_link, prompt.prompt_name
 
-  return render_template('dailyprompt.html', logged_in_user=logged_in_user, random_prompt=random_prompt, all_prompts=all_prompts, form=form, all_comments = all_comments)
+  return render_template('dailyprompt.html', commented_users=commented_users, logged_in_user=logged_in_user, random_prompt=random_prompt, all_prompts=all_prompts, form=form, all_comments = all_comments)
 
 
 @app.route('/home/users')
