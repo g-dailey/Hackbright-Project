@@ -27,6 +27,7 @@
             <br>
             <h5 style="color:rgb(197, 196, 194);">Please take 30 minutes to solve the following prompt and share your answer with explanation in the comments!</h5>
             <p class="c2"><a href= "{{ random_prompt.prompt_link }}"> {{ random_prompt.prompt_name }}</a></p>
+            <p style="color:rgb(197, 196, 194);"> {{random_prompt.prompt_description }}</p>
         </div>
     </div>
     </div>
@@ -60,7 +61,7 @@
   {% endfor %}
   {% endfor %}
 
-  <div style="color:rgb(197, 196, 194);" class="container">
+  <div style="color:rgb(197, 196, 194);" class="commentcontainer">
 
     <div id="commentbox" class="content-section">
       <form method="POST" action="/dailyprompt">

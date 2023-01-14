@@ -73,6 +73,12 @@ body {
 #commentbox {
   width: 90%;
   margin-left: 1%;
+  resize: both;
+  overflow: scroll
+}
+.form-control .form-control-lg{
+  resize: both;
+  overflow: scroll
 }
 
 #registerbox {
